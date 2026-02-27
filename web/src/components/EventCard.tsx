@@ -1,9 +1,10 @@
-import Link from 'next/link';
-import { EventTypeBadge } from './EventTypeIcon';
+import Link from 'next/link'
+import { EventTypeBadge } from './EventTypeIcon'
+import { Card, CardBody } from './Card'
 
 interface EventCardProps {
-  event: any;
-  showPipelineLink?: boolean;
+  event: any
+  showPipelineLink?: boolean
 }
 
 export function EventCard({ event, showPipelineLink = false }: EventCardProps) {
@@ -11,41 +12,49 @@ export function EventCard({ event, showPipelineLink = false }: EventCardProps) {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
-  });
+  })
 
   const formattedTime = new Date(event.createdAt).toLocaleTimeString('en-US', {
     hour: '2-digit',
     minute: '2-digit',
-  });
+  })
 
   return (
-    <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-      <div className="flex items-start justify-between mb-2">
-        <div className="flex-1">
-          <h3 className="font-semibold text-lg">{event.title}</h3>
-          {event.description && <p className="text-gray-600 text-sm mt-1">{event.description}</p>}
+    <Card className="hover:shadow-lg">
+      <CardBody>
+        <div className="flex items-start justify-between gap-4 mb-3">
+          <div className="flex-1">
+            <h3 className="font-semibold text-lg text-neutral-900 dark:text-neutral-50">{event.title}</h3>
+            {event.description && (
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-2">{event.description}</p>
+            )}
+          </div>
+          <div className="flex-shrink-0">
+            <EventTypeBadge type={event.type} />
+          </div>
         </div>
-        <EventTypeBadge type={event.type} />
-      </div>
 
-      <div className="flex items-center gap-4 mt-4 text-sm text-gray-500">
-        <time dateTime={event.createdAt.toISOString()}>
-          {formattedDate} at {formattedTime}
-        </time>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-600 dark:text-neutral-400">
+          <time dateTime={event.createdAt?.toString()}>
+            {formattedDate} at {formattedTime}
+          </time>
 
-        {showPipelineLink && event.pipelineId && (
-          <Link
-            href={`/recruitment/${event.pipelineId}`}
-            className="text-blue-600 hover:underline"
-          >
-            View Pipeline
-          </Link>
-        )}
+          <div className="flex gap-3">
+            {showPipelineLink && event.pipelineId && (
+              <Link
+                href={`/recruitment/${event.pipelineId}`}
+                className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
+              >
+                View Pipeline
+              </Link>
+            )}
 
-        <Link href={`/events/${event.id}`} className="text-blue-600 hover:underline">
-          View Details
-        </Link>
-      </div>
-    </div>
-  );
+            <Link href={`/events/${event.id}`} className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
+              Details
+            </Link>
+          </div>
+        </div>
+      </CardBody>
+    </Card>
+  )
 }

@@ -1,12 +1,14 @@
-'use client';
+'use client'
 
-import { EventCard } from './EventCard';
+import { EventCard } from './EventCard'
+import { Alert } from './Alert'
+import { Card, CardHeader, CardBody } from './Card'
 
 interface TimelineProps {
-  events: any[];
-  isLoading?: boolean;
-  error?: Error | null;
-  groupByPipeline?: boolean;
+  events: any[]
+  isLoading?: boolean
+  error?: Error | null
+  groupByPipeline?: boolean
 }
 
 export function Timeline({ events, isLoading = false, error = null, groupByPipeline = false }: TimelineProps) {
@@ -14,27 +16,27 @@ export function Timeline({ events, isLoading = false, error = null, groupByPipel
     return (
       <div className="space-y-4">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-32 bg-gray-200 rounded animate-pulse" />
+          <div key={i} className="h-32 bg-neutral-200 dark:bg-neutral-800 rounded animate-pulse" />
         ))}
       </div>
-    );
+    )
   }
 
   if (error) {
     return (
-      <div className="p-4 bg-red-50 border border-red-200 rounded text-red-700">
-        Error loading events: {error.message}
-      </div>
-    );
+      <Alert type="error" title="Error loading events">
+        {error.message}
+      </Alert>
+    )
   }
 
   if (events.length === 0) {
     return (
-      <div className="p-8 text-center text-gray-500">
-        <p className="text-lg">No events found</p>
-        <p className="text-sm">Try adjusting your filters or create a new event</p>
+      <div className="py-12 text-center">
+        <p className="text-lg font-medium text-neutral-900 dark:text-neutral-50">No events found</p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-2">Try adjusting your filters or create a new event</p>
       </div>
-    );
+    )
   }
 
   if (!groupByPipeline) {
@@ -44,40 +46,40 @@ export function Timeline({ events, isLoading = false, error = null, groupByPipel
           <EventCard key={event.id} event={event} showPipelineLink={true} />
         ))}
       </div>
-    );
+    )
   }
 
   // Group by pipeline
   const grouped = events.reduce(
     (acc, event) => {
-      const key = event.pipelineId || 'standalone';
+      const key = event.pipelineId || 'standalone'
       if (!acc[key]) {
-        acc[key] = [];
+        acc[key] = []
       }
-      acc[key].push(event);
-      return acc;
+      acc[key].push(event)
+      return acc
     },
     {} as Record<string, any[]>
-  );
+  )
 
   return (
     <div className="space-y-6">
       {Object.entries(grouped).map(([pipelineId, pipelineEvents]) => (
-        <div key={pipelineId} className="border border-gray-300 rounded-lg overflow-hidden">
+        <Card key={pipelineId}>
           {pipelineId !== 'standalone' && (
-            <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
-              <h3 className="font-semibold text-sm">
+            <CardHeader className="bg-neutral-50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-700">
+              <h3 className="font-semibold text-base text-neutral-900 dark:text-neutral-50">
                 Pipeline: {pipelineId.substring(0, 8)}... ({(pipelineEvents as any[]).length} events)
               </h3>
-            </div>
+            </CardHeader>
           )}
-          <div className="p-4 space-y-4">
+          <CardBody className="space-y-4">
             {(pipelineEvents as any[]).map((event: any) => (
               <EventCard key={event.id} event={event} showPipelineLink={pipelineId !== 'standalone'} />
             ))}
-          </div>
-        </div>
+          </CardBody>
+        </Card>
       ))}
     </div>
-  );
+  )
 }

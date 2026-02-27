@@ -1,36 +1,48 @@
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { EventForm } from '@/components/EventForm';
-import { EventType } from '@prisma/client';
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { EventForm } from '@/components/EventForm'
+import { EventType } from '@prisma/client'
+import { Header } from '@/components/Header'
+import { Container } from '@/components/Container'
+import { PageHeader } from '@/components/PageHeader'
+import { Button } from '@/components/Button'
 
 export default function NewEventPage() {
-  const router = useRouter();
-  const { pipelineId, type } = router.query;
+  const router = useRouter()
+  const { pipelineId, type } = router.query
 
   const handleSuccess = () => {
     if (pipelineId) {
-      router.push(`/recruitment/${pipelineId}`);
+      router.push(`/recruitment/${pipelineId}`)
     } else {
-      router.push('/timeline');
+      router.push('/timeline')
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <Link href="/timeline" className="text-blue-600 hover:underline mb-4 inline-block">
-          ← Back to Timeline
-        </Link>
+    <div className="min-h-screen bg-white dark:bg-neutral-950">
+      <Header />
+      <main>
+        <Container className="py-8">
+          <div className="mb-6">
+            <Link href="/timeline">
+              <Button variant="secondary" className="mb-6">
+                ← Back to Timeline
+              </Button>
+            </Link>
+          </div>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Event</h1>
-        <p className="text-gray-600 mb-8">Add a new event to the timeline</p>
+          <PageHeader title="Create Event" description="Add a new event to the timeline" />
 
-        <EventForm
-          pipelineId={pipelineId as string | undefined}
-          eventType={type as EventType | undefined}
-          onSuccess={handleSuccess}
-        />
-      </div>
+          <div className="max-w-2xl">
+            <EventForm
+              pipelineId={pipelineId as string | undefined}
+              eventType={type as EventType | undefined}
+              onSuccess={handleSuccess}
+            />
+          </div>
+        </Container>
+      </main>
     </div>
-  );
+  )
 }
