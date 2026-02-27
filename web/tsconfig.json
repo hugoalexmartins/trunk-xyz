@@ -20,6 +20,18 @@
       ],
       "@/server/*": [
         "./src/server/*"
+      ],
+      "@/hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@/utils/*": [
+        "./src/utils/*"
+      ],
+      "@/styles/*": [
+        "./src/styles/*"
+      ],
+      "@/contexts/*": [
+        "./src/contexts/*"
       ]
     },
     "allowJs": true

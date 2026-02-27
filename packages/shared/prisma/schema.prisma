@@ -10,4 +10,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Models will be added here as features develop
+enum EventType {
+  APPLICATION
+  SCREENING
+  INTERVIEW
+  OFFER
+  REJECTION
+  HIRED
+}
+
+enum EventStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  passwordHash String
+  isApproved Boolean  @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  events    Event[]
+
+  @@index([email])
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  pipelineId String?  // Optional UUID to group related events (e.g., recruitment journey)
+  type      EventType
+  status    EventStatus @default(PENDING)
+  title     String
+  description String?
+  metadata  Json?     // Event-type-specific data stored as JSON
+  createdById String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  creator   User?     @relation(fields: [createdById], references: [id])
+
+  // Indexes for efficient querying
+  @@index([pipelineId, createdAt])
+  @@index([createdAt])
+  @@index([type])
+  @@index([createdById])
+}

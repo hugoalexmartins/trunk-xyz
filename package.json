@@ -16,6 +16,7 @@
     "dx": "pnpm install && pnpm --filter=shared run db:reset && pnpm run infra:dev:up && pnpm run dev:web",
     "build": "turbo run build",
     "build:check": "turbo run build:check",
+    "db:install": "pnpm --filter=shared run db:generate",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "tc": "turbo run typecheck",
@@ -25,5 +26,12 @@
   },
   "devDependencies": {
     "turbo": "^1.13.4"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.0.0",
+    "@trpc/client": "^11.10.0",
+    "@trpc/next": "^11.10.0",
+    "@trpc/react-query": "^11.10.0",
+    "@trpc/server": "^11.10.0"
   }
 }
