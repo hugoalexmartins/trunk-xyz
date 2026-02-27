@@ -87,42 +87,42 @@
 
 ## 8. Dark Mode Implementation
 
-- [ ] 8.1 Ensure all colors work in light mode
-- [ ] 8.2 Ensure all colors work in dark mode
-- [ ] 8.3 Test theme toggle functionality
-- [ ] 8.4 Verify no flickering on page load
-- [ ] 8.5 Test system preference detection
-- [ ] 8.6 Test theme persistence across sessions
+- [x] 8.1 Ensure all colors work in light mode
+- [x] 8.2 Ensure all colors work in dark mode
+- [x] 8.3 Test theme toggle functionality
+- [x] 8.4 Verify no flickering on page load
+- [x] 8.5 Test system preference detection
+- [x] 8.6 Test theme persistence across sessions
 
 ## 9. Responsive Design
 
 - [x] 9.1 Add mobile-first breakpoints to config
-- [ ] 9.2 Ensure timeline works on mobile
-  - [ ] 9.2.1 Single column layout
-  - [ ] 9.2.2 Touch-friendly filter buttons
-  - [ ] 9.2.3 Readable event cards
+- [x] 9.2 Ensure timeline works on mobile
+  - [x] 9.2.1 Single column layout
+  - [x] 9.2.2 Touch-friendly filter buttons
+  - [x] 9.2.3 Readable event cards
 
-- [ ] 9.3 Ensure forms work on mobile
-  - [ ] 9.3.1 Full-width inputs
-  - [ ] 9.3.2 Stacked buttons
-  - [ ] 9.3.3 Large touch targets
+- [x] 9.3 Ensure forms work on mobile
+  - [x] 9.3.1 Full-width inputs
+  - [x] 9.3.2 Stacked buttons
+  - [x] 9.3.3 Large touch targets
 
-- [ ] 9.4 Ensure navigation works on mobile
-  - [ ] 9.4.1 Responsive header layout
-  - [ ] 9.4.2 Theme toggle visibility
-  - [ ] 9.4.3 Menu adaptations
+- [x] 9.4 Ensure navigation works on mobile
+  - [x] 9.4.1 Responsive header layout
+  - [x] 9.4.2 Theme toggle visibility
+  - [x] 9.4.3 Menu adaptations
 
-- [ ] 9.5 Test on tablet breakpoint
-- [ ] 9.6 Test on desktop breakpoint
+- [x] 9.5 Test on tablet breakpoint
+- [x] 9.6 Test on desktop breakpoint
 
 ## 10. Interactive States
 
-- [ ] 10.1 Add hover states to all buttons
-- [ ] 10.2 Add focus states to all inputs
-- [ ] 10.3 Add focus states to all interactive elements
-- [ ] 10.4 Add active states to navigation links
-- [ ] 10.5 Add disabled states to buttons and inputs
-- [ ] 10.6 Add loading states
+- [x] 10.1 Add hover states to all buttons
+- [x] 10.2 Add focus states to all inputs
+- [x] 10.3 Add focus states to all interactive elements
+- [x] 10.4 Add active states to navigation links
+- [x] 10.5 Add disabled states to buttons and inputs
+- [x] 10.6 Add loading states
 
 ## 11. Testing and Polish
 
