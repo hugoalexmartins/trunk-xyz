@@ -26,6 +26,9 @@
       ],
       "@/utils/*": [
         "./src/utils/*"
+      ],
+      "@/styles/*": [
+        "./src/styles/*"
       ]
     },
     "allowJs": true
