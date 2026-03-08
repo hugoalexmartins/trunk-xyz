@@ -38,6 +38,8 @@
 
 ## 3. GitHub Branch Protection Configuration
 
+**NOTE**: These require manual GitHub UI steps. Do after merging this PR to main.
+
 - [ ] 3.1 Go to repository Settings → Branches
 - [ ] 3.2 Select main branch for protection
 - [ ] 3.3 Enable "Require a pull request before merging"
@@ -55,10 +57,10 @@
 
 - [x] 4.1 Commit `.github/workflows/ci.yml` to a test branch
 - [x] 4.2 Push test branch and create a PR to main
-- [ ] 4.3 Verify GitHub Actions starts workflow automatically
-- [ ] 4.4 Wait for all four jobs to complete
-- [ ] 4.5 Verify all jobs pass (green checkmarks shown)
-- [ ] 4.6 Verify merge button is enabled when all checks pass
+- [x] 4.3 Verify GitHub Actions starts workflow automatically
+- [x] 4.4 Wait for all four jobs to complete
+- [x] 4.5 Verify all jobs pass (green checkmarks shown)
+- [x] 4.6 Verify merge button is enabled when all checks pass
 - [ ] 4.7 Test merge blocking by creating test failure:
   - [ ] Create a test that fails
   - [ ] Push to PR branch
@@ -80,7 +82,7 @@
   - [ ] Push to PR branch
   - [ ] Verify CI runs and build fails
   - [ ] Verify merge button is disabled
-- [ ] 4.11 Fix all errors and verify CI passes again
+- [x] 4.11 Fix all errors and verify CI passes again
 - [ ] 4.12 Close test PR without merging (discard test changes)
 
 ## 5. Verify Existing PR Protection
@@ -99,18 +101,18 @@
 
 ## 6. Documentation
 
-- [ ] 6.1 Update CLAUDE.md to document CI pipeline:
-  - [ ] Explain what CI checks are run
-  - [ ] Explain when checks are triggered (PR to main, push to main)
-  - [ ] Explain what must pass before merge
-- [ ] 6.2 Add section to CLAUDE.md on fixing CI failures:
-  - [ ] How to run each check locally before pushing
-  - [ ] How to understand CI logs and find errors
-  - [ ] Common issues and solutions
-- [ ] 6.3 Document in CLAUDE.md that all checks must pass:
-  - [ ] No exceptions for merge
-  - [ ] Admin cannot bypass (or can only in emergencies)
-  - [ ] Stale checks are re-run on new commits
+- [x] 6.1 Update CLAUDE.md to document CI pipeline:
+  - [x] Explain what CI checks are run
+  - [x] Explain when checks are triggered (PR to main, push to main)
+  - [x] Explain what must pass before merge
+- [x] 6.2 Add section to CLAUDE.md on fixing CI failures:
+  - [x] How to run each check locally before pushing
+  - [x] How to understand CI logs and find errors
+  - [x] Common issues and solutions
+- [x] 6.3 Document in CLAUDE.md that all checks must pass:
+  - [x] No exceptions for merge
+  - [x] Admin cannot bypass (or can only in emergencies)
+  - [x] Stale checks are re-run on new commits
 
 ## 7. Cleanup and Final Verification
 
