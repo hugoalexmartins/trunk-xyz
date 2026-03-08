@@ -10,6 +10,7 @@ import { Button } from '@/components/Button'
 import { Card, CardBody } from '@/components/Card'
 import { Badge } from '@/components/Badge'
 import { Spinner } from '@/components/Spinner'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 interface PipelineGroup {
   pipelineId: string
@@ -17,7 +18,7 @@ interface PipelineGroup {
   latestDate: Date
 }
 
-export default function RecruitmentPage() {
+function RecruitmentPageContent() {
   const [pipelines, setPipelines] = useState<PipelineGroup[]>([])
   const { data, isLoading } = useEvents({ type: EventType.APPLICATION })
 
@@ -111,5 +112,13 @@ export default function RecruitmentPage() {
         </Container>
       </main>
     </div>
+  )
+}
+
+export default function RecruitmentPage() {
+  return (
+    <ProtectedRoute returnUrl="/recruitment">
+      <RecruitmentPageContent />
+    </ProtectedRoute>
   )
 }

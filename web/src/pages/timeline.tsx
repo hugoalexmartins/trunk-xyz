@@ -7,8 +7,9 @@ import { Header } from '@/components/Header'
 import { PageHeader } from '@/components/PageHeader'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
-export default function TimelinePage() {
+function TimelinePageContent() {
   const [filters, setFilters] = useState<FilterState>({})
   const { data, isLoading, error } = useEvents(filters)
 
@@ -39,5 +40,13 @@ export default function TimelinePage() {
         </Container>
       </main>
     </div>
+  )
+}
+
+export default function TimelinePage() {
+  return (
+    <ProtectedRoute returnUrl="/timeline">
+      <TimelinePageContent />
+    </ProtectedRoute>
   )
 }
