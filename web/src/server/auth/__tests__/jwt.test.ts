@@ -64,19 +64,33 @@ describe("JWT Token Management", () => {
       expect(payload).toBeNull();
     });
 
+<<<<<<< HEAD
     it("should return null for a malformed token", () => {
       const malformedToken = "not-a-token";
+=======
+    it('should return null for a malformed token', () => {
+      const malformedToken = 'not-a-token';
+>>>>>>> refs/remotes/origin/feat/add-users
       const payload = verifyToken(malformedToken);
 
       expect(payload).toBeNull();
     });
 
+<<<<<<< HEAD
     it("should return null for an expired token", () => {
       // Create a token with expired signature
       const expiredToken = jwt.sign(
         { sub: testUserId, email: testEmail },
         "wrong-secret",
         { expiresIn: "1h" },
+=======
+    it('should return null for an expired token', () => {
+      // Create a token with expired signature
+      const expiredToken = jwt.sign(
+        { sub: testUserId, email: testEmail },
+        'wrong-secret',
+        { expiresIn: '1h' }
+>>>>>>> refs/remotes/origin/feat/add-users
       );
       const payload = verifyToken(expiredToken);
 
