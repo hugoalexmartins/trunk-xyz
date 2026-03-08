@@ -26,6 +26,18 @@ enum EventStatus {
   ARCHIVED
 }
 
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  passwordHash String
+  isApproved Boolean  @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  events    Event[]
+
+  @@index([email])
+}
+
 model Event {
   id        String   @id @default(cuid())
   pipelineId String?  // Optional UUID to group related events (e.g., recruitment journey)
@@ -34,11 +46,15 @@ model Event {
   title     String
   description String?
   metadata  Json?     // Event-type-specific data stored as JSON
+  createdById String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+
+  creator   User?     @relation(fields: [createdById], references: [id])
 
   // Indexes for efficient querying
   @@index([pipelineId, createdAt])
   @@index([createdAt])
   @@index([type])
+  @@index([createdById])
 }

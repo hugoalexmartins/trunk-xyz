@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { createTRPCRouter, publicProcedure } from '../trpc';
+import { createTRPCRouter, protectedProcedure } from '../trpc';
 import type { Prisma } from '@prisma/client';
 import { EventType, EventStatus } from '@prisma/client';
 
@@ -35,7 +35,7 @@ const listEventsFilterSchema = z.object({
 
 export const eventsRouter = createTRPCRouter({
   // CRUD operations
-  create: publicProcedure
+  create: protectedProcedure
     .input(createEventSchema)
     .mutation(async ({ ctx, input }) => {
       return ctx.prisma.event.create({
@@ -46,19 +46,36 @@ export const eventsRouter = createTRPCRouter({
           pipelineId: input.pipelineId || null,
           status: input.status,
           metadata: input.metadata as Prisma.InputJsonValue,
+          createdById: ctx.user.sub,
+        },
+        include: {
+          creator: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
         },
       });
     }),
 
-  getById: publicProcedure
+  getById: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       return ctx.prisma.event.findUnique({
         where: { id: input.id },
+        include: {
+          creator: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
+        },
       });
     }),
 
-  update: publicProcedure
+  update: protectedProcedure
     .input(z.object({ id: z.string(), data: updateEventSchema }))
     .mutation(async ({ ctx, input }) => {
       const updateData: Prisma.EventUpdateInput = {};
@@ -70,10 +87,18 @@ export const eventsRouter = createTRPCRouter({
       return ctx.prisma.event.update({
         where: { id: input.id },
         data: updateData,
+        include: {
+          creator: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
+        },
       });
     }),
 
-  delete: publicProcedure
+  delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return ctx.prisma.event.delete({
@@ -82,7 +107,7 @@ export const eventsRouter = createTRPCRouter({
     }),
 
   // List operations
-  listByPipeline: publicProcedure
+  listByPipeline: protectedProcedure
     .input(
       z.object({
         pipelineId: z.string().uuid(),
@@ -97,6 +122,14 @@ export const eventsRouter = createTRPCRouter({
         take: input.limit + 1,
         cursor: input.cursor ? { id: input.cursor } : undefined,
         skip: input.cursor ? 1 : undefined,
+        include: {
+          creator: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
+        },
       });
 
       let nextCursor: string | undefined = undefined;
@@ -110,7 +143,7 @@ export const eventsRouter = createTRPCRouter({
       };
     }),
 
-  listAll: publicProcedure
+  listAll: protectedProcedure
     .input(listEventsFilterSchema)
     .query(async ({ ctx, input }) => {
       const where: Prisma.EventWhereInput = {};
@@ -142,6 +175,14 @@ export const eventsRouter = createTRPCRouter({
         take: input.limit + 1,
         cursor: input.cursor ? { id: input.cursor } : undefined,
         skip: input.cursor ? 1 : undefined,
+        include: {
+          creator: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
+        },
       });
 
       let nextCursor: string | undefined = undefined;
@@ -155,7 +196,7 @@ export const eventsRouter = createTRPCRouter({
       };
     }),
 
-  count: publicProcedure
+  count: protectedProcedure
     .input(z.object({ pipelineId: z.string().uuid().optional() }))
     .query(async ({ ctx, input }) => {
       return ctx.prisma.event.count({
