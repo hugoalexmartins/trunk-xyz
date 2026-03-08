@@ -6,6 +6,7 @@
       "@/*": ["./*"],
       "@/web/*": ["../web/src/*"],
       "@/src/*": ["./src/*"],
+      "@repo/*": ["../packages/*"],
       "@/pages/*": ["./src/pages/*"],
       "@/components/*": ["./src/components/*"],
       "@/features/*": ["./src/features/*"],
