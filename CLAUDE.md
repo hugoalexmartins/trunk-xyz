@@ -101,6 +101,51 @@ pnpm --filter=web test:watch    # Run tests in watch mode
 - **Package Manager**: pnpm v9.5.0
 - **Task Orchestration**: Turbo
 
+## Authentication System
+
+The application implements JWT-based stateless authentication with the following components:
+
+### Key Files
+- **Auth Utilities**: `/web/src/server/auth/` - Hash, JWT, constants, and middleware functions
+- **Auth API**: `/web/src/server/api/routers/auth.ts` - tRPC endpoints for signup, login, logout, getCurrentUser
+- **User Context**: `/web/src/contexts/UserContext.ts` and `UserProvider.tsx` - React context for authenticated user state
+- **Auth Hooks**: `/web/src/hooks/useAuth.ts`, `useLogin.ts`, `useSignup.ts`, `useLogout.ts` - React hooks for auth operations
+
+### Usage
+
+**Checking if user is authenticated:**
+```typescript
+const { user, isLoading } = useAuth();
+```
+
+**Login:**
+```typescript
+const { mutate: login } = useLogin();
+await login(email, password);
+```
+
+**Signup:**
+```typescript
+const { mutate: signup } = useSignup();
+await signup(email, password);
+```
+
+**Protecting routes:**
+Wrap page content with `ProtectedRoute` component:
+```typescript
+<ProtectedRoute returnUrl="/timeline">
+  <PageContent />
+</ProtectedRoute>
+```
+
+### API Endpoints
+- `POST /api/trpc/auth.signup` - Register new user
+- `POST /api/trpc/auth.login` - Login user (sets HTTP-only cookie)
+- `POST /api/trpc/auth.logout` - Logout user (clears cookie)
+- `GET /api/trpc/auth.getCurrentUser` - Get current authenticated user (requires auth)
+
+All event endpoints require authentication via `protectedProcedure`.
+
 ## Development Guidelines
 
 ### Frontend Features
