@@ -115,5 +115,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate database models
+        run: pnpm db:install
+
       - name: Build check
         run: pnpm build:check
