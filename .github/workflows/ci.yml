@@ -49,6 +49,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate database models
+        run: pnpm db:install
+
       - name: Run tests
         run: pnpm --filter=web test
 
@@ -70,6 +73,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Generate database models
+        run: pnpm db:install
 
       - name: Type check
         run: pnpm tc
