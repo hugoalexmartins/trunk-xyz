@@ -53,8 +53,8 @@
 
 ## 4. Test CI Workflow
 
-- [ ] 4.1 Commit `.github/workflows/ci.yml` to a test branch
-- [ ] 4.2 Push test branch and create a PR to main
+- [x] 4.1 Commit `.github/workflows/ci.yml` to a test branch
+- [x] 4.2 Push test branch and create a PR to main
 - [ ] 4.3 Verify GitHub Actions starts workflow automatically
 - [ ] 4.4 Wait for all four jobs to complete
 - [ ] 4.5 Verify all jobs pass (green checkmarks shown)
