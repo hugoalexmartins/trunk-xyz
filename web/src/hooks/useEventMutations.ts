@@ -12,8 +12,11 @@ interface CreateEventInput {
 }
 
 interface UpdateEventInput {
+  id: string;
+  type?: EventType;
   title?: string;
   description?: string;
+  pipelineId?: string;
   status?: EventStatus;
   metadata?: Record<string, unknown>;
 }
@@ -36,8 +39,8 @@ export function useUpdateEvent() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: UpdateEventInput }) => {
-      return trpc.events.update.mutate({ id, data });
+    mutationFn: async (input: UpdateEventInput) => {
+      return trpc.events.update.mutate(input);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
