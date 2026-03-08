@@ -7,8 +7,9 @@ import { Container } from '@/components/Container'
 import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/Button'
 import { Card, CardBody } from '@/components/Card'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
-export default function PipelineDetailPage() {
+function PipelineDetailContent() {
   const router = useRouter()
   const { pipelineId } = router.query
   const { data, isLoading } = useEventsByPipeline(pipelineId as string, 100)
@@ -79,5 +80,17 @@ export default function PipelineDetailPage() {
         </Container>
       </main>
     </div>
+  )
+}
+
+export default function PipelineDetailPage() {
+  const router = useRouter()
+  const { pipelineId } = router.query
+  const returnUrl = pipelineId ? `/recruitment/${pipelineId}` : '/recruitment'
+
+  return (
+    <ProtectedRoute returnUrl={returnUrl}>
+      <PipelineDetailContent />
+    </ProtectedRoute>
   )
 }

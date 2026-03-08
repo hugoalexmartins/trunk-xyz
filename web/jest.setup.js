@@ -1,2 +1,2 @@
-// jest.setup.js
-import '@testing-library/jest-dom'
+// Optional: configure or set up a testing framework before each test.
+// Add any global test setup here
