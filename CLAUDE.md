@@ -79,6 +79,12 @@ pnpm run lint        # Run ESLint across the monorepo
 pnpm run lint:fix    # Automatically fix ESLint issues
 ```
 
+### Testing
+```sh
+pnpm --filter=web test          # Run tests in web package
+pnpm --filter=web test:watch    # Run tests in watch mode
+```
+
 ## Technology Stack
 
 ### Web Application (`/web/`)
@@ -176,6 +182,50 @@ All event endpoints require authentication via `protectedProcedure`.
 6. **Start development**: `pnpm run dev:web`
 
 The app will be available at `http://localhost:3000`
+
+## Continuous Integration (CI)
+
+The repository uses GitHub Actions for automated code quality checks on every PR and push to main.
+
+### CI Checks
+
+All of the following checks **must pass** before code can be merged to main:
+- **Tests** (`pnpm --filter=web test`) - Unit tests using Jest
+- **TypeScript** (`pnpm tc`) - Type checking across all packages
+- **Lint** (`pnpm run lint`) - ESLint code quality validation
+- **Build** (`pnpm build:check`) - Next.js build verification
+
+### Running Checks Locally Before Pushing
+
+Always run these checks locally before pushing to avoid CI failures:
+
+```sh
+# Run all checks
+pnpm --filter=web test          # Run tests
+pnpm tc                          # Type check
+pnpm run lint                    # Lint check
+pnpm build:check                 # Build verification
+```
+
+**No code can be merged with failing tests, TypeScript errors, linting violations, or build failures.** This is a hard requirement enforced by branch protection on main.
+
+### CI Workflow Details
+
+The GitHub Actions workflow (`.github/workflows/ci.yml`):
+- Runs on every PR to main and every push to main
+- Executes 4 parallel jobs: tests, typescript, lint, and build
+- Caches dependencies for faster runs (2-3 min vs 5-10 min uncached)
+- Requires all 4 jobs to pass for merge to be allowed
+- Dismisses stale checks when new commits are pushed
+
+### Fixing CI Failures
+
+If CI fails:
+1. Read the detailed error in the GitHub Actions logs
+2. Fix the issue locally (`pnpm --filter=web test`, `pnpm tc`, `pnpm run lint`, etc.)
+3. Commit the fix
+4. Push to your branch - CI will automatically re-run
+5. Once all checks pass, the merge button will be enabled
 
 ## Troubleshooting
 

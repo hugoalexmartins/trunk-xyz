@@ -8,6 +8,8 @@
     "build": "next build",
     "build:check": "next build --experimental-app-only --debug",
     "start": "next start",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "typecheck": "tsc --noEmit",
@@ -24,7 +26,8 @@
     "next-themes": "^0.4.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "trpc": "latest"
+    "trpc": "latest",
+    "zod": "^3.22.0"
   },
   "devDependencies": {
     "@repo/config-eslint": "workspace:*",
