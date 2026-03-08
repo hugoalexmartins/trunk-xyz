@@ -7,11 +7,11 @@ import {
   COOKIE_OPTIONS,
 } from "@/server/auth/constants";
 import { TRPCError } from "@trpc/server";
-import { SignupInput, LoginInput } from "@/web/schemas/auth";
+import { signupInputSchema, loginInputSchema } from "@/web/schemas/auth";
 
 export const authRouter = createTRPCRouter({
   signup: publicProcedure
-    .input(SignupInput)
+    .input(signupInputSchema)
     .mutation(async ({ ctx, input }) => {
       // Validate password
       const passwordValidation = validatePassword(input.password);
@@ -49,7 +49,7 @@ export const authRouter = createTRPCRouter({
       };
     }),
 
-  login: publicProcedure.input(LoginInput).mutation(async ({ ctx, input }) => {
+  login: publicProcedure.input(loginInputSchema).mutation(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({
       where: { email: input.email },
     });

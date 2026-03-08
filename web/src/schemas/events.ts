@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { EventType, EventStatus } from "@prisma/client";
 
-export const CreateEventInput = z.object({
+export const createEventInputSchema = z.object({
   type: z.nativeEnum(EventType),
   title: z
     .string()
@@ -19,9 +19,9 @@ export const CreateEventInput = z.object({
   metadata: z.record(z.string(), z.any()).optional(),
 });
 
-export type CreateEventInput = z.infer<typeof CreateEventInput>;
+export type CreateEventInput = z.infer<typeof createEventInputSchema>;
 
-export const UpdateEventInput = z.object({
+export const updateEventInputSchema = z.object({
   id: z.string().uuid("Invalid event ID"),
 
   type: z.nativeEnum(EventType).optional(),
@@ -41,9 +41,9 @@ export const UpdateEventInput = z.object({
   metadata: z.record(z.string(), z.any()).optional(),
 });
 
-export type UpdateEventInput = z.infer<typeof UpdateEventInput>;
+export type UpdateEventInput = z.infer<typeof updateEventInputSchema>;
 
-export const ListEventsInput = z.object({
+export const listEventsInputSchema = z.object({
   skip: z.number().int().min(0).default(0),
   take: z.number().int().min(1).max(100).default(20),
   sortBy: z.enum(["date", "createdAt"]).default("createdAt"),
@@ -58,4 +58,4 @@ export const ListEventsInput = z.object({
   cursor: z.string().optional(),
 });
 
-export type ListEventsInput = z.infer<typeof ListEventsInput>;
+export type ListEventsInput = z.infer<typeof listEventsInputSchema>;

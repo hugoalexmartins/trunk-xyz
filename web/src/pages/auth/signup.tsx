@@ -51,7 +51,7 @@ export default function SignupPage() {
       await mutate(email, password)
       // On success, redirect to login
       router.push('/auth/login?message=Account%20created%20successfully.%20Please%20log%20in.')
-    } catch (err) {
+    } catch {
       // Error is handled by the hook
     }
   }

@@ -20,23 +20,23 @@ const PASSWORD_SCHEMA = z
   );
 
 // User signup
-export const SignupInput = z.object({
+export const signupInputSchema = z.object({
   email: EMAIL_SCHEMA,
   password: PASSWORD_SCHEMA,
 });
 
-export type SignupInput = z.infer<typeof SignupInput>;
+export type SignupInput = z.infer<typeof signupInputSchema>;
 
 // User login
-export const LoginInput = z.object({
+export const loginInputSchema = z.object({
   email: EMAIL_SCHEMA,
   password: z.string().min(1, "Password is required"),
 });
 
-export type LoginInput = z.infer<typeof LoginInput>;
+export type LoginInput = z.infer<typeof loginInputSchema>;
 
 // Change password (optional, include if you have this endpoint)
-export const ChangePasswordInput = z
+export const changePasswordInputSchema = z
   .object({
     currentPassword: z.string().min(1, "Current password is required"),
     newPassword: PASSWORD_SCHEMA,
@@ -47,4 +47,4 @@ export const ChangePasswordInput = z
     path: ["confirmPassword"],
   });
 
-export type ChangePasswordInput = z.infer<typeof ChangePasswordInput>;
+export type ChangePasswordInput = z.infer<typeof changePasswordInputSchema>;

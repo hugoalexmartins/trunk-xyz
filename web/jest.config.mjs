@@ -13,27 +13,42 @@ const clientTestConfig = {
   testEnvironmentOptions: { globalsCleanup: "on" },
 };
 
+const asyncServerTestConfig = {
+  displayName: "async-server",
+  testMatch: ["/**/__tests__/**/*.[jt]s?(x)", "/**/*.test.[jt]s?(x)", "/**/*.spec.[jt]s?(x)"],
+  testPathIgnorePatterns: ["/.next/", "/node_modules/", ".*\\.clienttest\\."],
+  testEnvironment: "node",
+};
+
 // To avoid the "Cannot use import statement outside a module" errors while transforming ESM.
 // jsonpath-plus is needed because @langfuse/shared barrel exports evals/utilities which imports it
 const esModules = ["superjson", "jsonpath-plus"];
-// Add any custom config to be passed to Jest
-/** @type {import('jest').Config} */
-const config = {
-  // Ignore .next/standalone to avoid "Haste module naming collision" warning
-  modulePathIgnorePatterns: ["<rootDir>/.next/"],
-  // Jest 30 performance: recycle workers when memory exceeds limit
-  workerIdleMemoryLimit: "512MB",
-  // Add more setup options before each test is run
-  projects: [
-    {
-      ...(await createJestConfig(clientTestConfig)()),
-      // Added transformIgnorePatterns to client tests to handle ESM dependencies from @langfuse/shared
-      // Without this, importing from @langfuse/shared fails with "Unexpected token 'export'" errors
-      transformIgnorePatterns: [
-        `/web/node_modules/(?!(${esModules.join("|")})/)`,
-      ],
-    },
-  ],
-};
 
-export default config;
+// Add any custom config to be passed to Jest
+export default async () => {
+  /** @type {import('jest').Config} */
+  const config = {
+    // Ignore .next/standalone to avoid "Haste module naming collision" warning
+    modulePathIgnorePatterns: ["<rootDir>/.next/"],
+    // Jest 30 performance: recycle workers when memory exceeds limit
+    workerIdleMemoryLimit: "512MB",
+    // Add more setup options before each test is run
+    projects: [
+      {
+        ...(await createJestConfig(clientTestConfig)()),
+        // Added transformIgnorePatterns to client tests to handle ESM dependencies from @langfuse/shared
+        // Without this, importing from @langfuse/shared fails with "Unexpected token 'export'" errors
+        transformIgnorePatterns: [
+          `/web/node_modules/(?!(${esModules.join("|")})/)`,
+        ],
+      },
+      {
+        ...(await createJestConfig(asyncServerTestConfig)()),
+        transformIgnorePatterns: [
+          `/web/node_modules/(?!(${esModules.join("|")})/)`,
+        ],
+      },
+    ],
+  };
+  return config;
+};

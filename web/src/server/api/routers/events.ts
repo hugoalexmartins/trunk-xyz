@@ -2,15 +2,15 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 import {
-  CreateEventInput,
-  UpdateEventInput,
-  ListEventsInput,
+  createEventInputSchema,
+  updateEventInputSchema,
+  listEventsInputSchema,
 } from "@/web/schemas/events";
 
 export const eventsRouter = createTRPCRouter({
   // CRUD operations
   create: protectedProcedure
-    .input(CreateEventInput)
+    .input(createEventInputSchema)
     .mutation(async ({ ctx, input }) => {
       return ctx.prisma.event.create({
         data: {
@@ -50,7 +50,7 @@ export const eventsRouter = createTRPCRouter({
     }),
 
   update: protectedProcedure
-    .input(UpdateEventInput)
+    .input(updateEventInputSchema)
     .mutation(async ({ ctx, input }) => {
       const { id, ...updateData } = input;
       const data: Prisma.EventUpdateInput = {};
@@ -124,7 +124,7 @@ export const eventsRouter = createTRPCRouter({
     }),
 
   listAll: protectedProcedure
-    .input(ListEventsInput)
+    .input(listEventsInputSchema)
     .query(async ({ ctx, input }) => {
       const events = await ctx.prisma.event.findMany({
         skip: input.skip ? 1 : undefined,

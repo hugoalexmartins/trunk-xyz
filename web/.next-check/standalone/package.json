@@ -1,0 +1,39 @@
+{
+  "name": "trunk-xyz",
+  "version": "0.0.1",
+  "private": true,
+  "description": "React UI timeline of events",
+  "author": "Hugo Martins",
+  "license": "MIT",
+  "packageManager": "pnpm@9.5.0",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "i": "pnpm install",
+    "dev": "turbo run dev",
+    "dev:web": "turbo run dev --filter=web",
+    "dx": "pnpm install && pnpm --filter=shared run db:reset && pnpm run infra:dev:up && pnpm run dev:web",
+    "build": "turbo run build",
+    "build:check": "turbo run build:check",
+    "db:install": "pnpm --filter=shared run db:generate",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "tc": "turbo run typecheck",
+    "typecheck": "turbo run typecheck",
+    "infra:dev:up": "docker compose up -d",
+    "infra:dev:down": "docker compose down"
+  },
+  "devDependencies": {
+    "turbo": "^1.13.4"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.0.0",
+    "@trpc/client": "^11.10.0",
+    "@trpc/next": "^11.10.0",
+    "@trpc/react-query": "^11.10.0",
+    "@trpc/server": "^11.10.0",
+    "winston": "^3.19.0",
+    "zod": "^4.3.6"
+  }
+}

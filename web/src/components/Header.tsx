@@ -25,7 +25,7 @@ export function Header() {
     try {
       await logout()
       router.push('/auth/login')
-    } catch (err) {
+    } catch {
       // Error handling is in the hook
     }
   }
