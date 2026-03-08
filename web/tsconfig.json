@@ -29,6 +29,9 @@
       ],
       "@/styles/*": [
         "./src/styles/*"
+      ],
+      "@/contexts/*": [
+        "./src/contexts/*"
       ]
     },
     "allowJs": true

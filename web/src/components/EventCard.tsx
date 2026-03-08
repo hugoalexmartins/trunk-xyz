@@ -34,10 +34,17 @@ export function EventCard({ event, showPipelineLink = false }: EventCardProps) {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-600 dark:text-neutral-400">
-          <time dateTime={event.createdAt?.toString()}>
-            {formattedDate} at {formattedTime}
-          </time>
+        <div className="flex flex-col gap-2 mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-600 dark:text-neutral-400">
+          <div className="flex items-center justify-between">
+            <time dateTime={event.createdAt?.toString()}>
+              {formattedDate} at {formattedTime}
+            </time>
+            {event.creator && (
+              <span className="text-xs text-neutral-500 dark:text-neutral-500">
+                by {event.creator.email}
+              </span>
+            )}
+          </div>
 
           <div className="flex gap-3">
             {showPipelineLink && event.pipelineId && (

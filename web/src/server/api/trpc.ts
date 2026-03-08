@@ -1,8 +1,13 @@
-import { initTRPC } from '@trpc/server';
+import { initTRPC, TRPCError } from '@trpc/server';
 import { PrismaClient } from '@prisma/client';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { TokenPayload } from '../auth/jwt';
 
 export type Context = {
   prisma: PrismaClient;
+  user?: TokenPayload | null;
+  req?: NextApiRequest;
+  res?: NextApiResponse;
 };
 
 /**
@@ -17,6 +22,17 @@ const t = initTRPC.context<Context>().create();
  */
 export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
+
+export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
+  if (!ctx.user) {
+    throw new TRPCError({ code: 'UNAUTHORIZED' });
+  }
+  return next({
+    ctx: {
+      user: ctx.user,
+    },
+  });
+});
 
 // Create a singleton instance of Prisma
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };

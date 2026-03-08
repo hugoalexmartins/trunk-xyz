@@ -6,8 +6,9 @@ import { Header } from '@/components/Header'
 import { Container } from '@/components/Container'
 import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/Button'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
-export default function NewEventPage() {
+function NewEventPageContent() {
   const router = useRouter()
   const { pipelineId, type } = router.query
 
@@ -44,5 +45,17 @@ export default function NewEventPage() {
         </Container>
       </main>
     </div>
+  )
+}
+
+export default function NewEventPage() {
+  const router = useRouter()
+  const { pipelineId } = router.query
+  const returnUrl = pipelineId ? `/recruitment/${pipelineId}` : '/timeline'
+
+  return (
+    <ProtectedRoute returnUrl={returnUrl}>
+      <NewEventPageContent />
+    </ProtectedRoute>
   )
 }
