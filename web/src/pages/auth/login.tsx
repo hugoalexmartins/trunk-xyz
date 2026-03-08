@@ -18,7 +18,7 @@ export default function LoginPage() {
       await mutate(email, password)
       const returnUrl = (router.query.returnUrl as string) || '/timeline'
       router.push(returnUrl)
-    } catch (err) {
+    } catch {
       // Error is handled by the hook
     }
   }

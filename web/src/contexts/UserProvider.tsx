@@ -31,7 +31,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         } else {
           setUser(null);
         }
-      } catch (err) {
+      } catch {
         // No user logged in or token expired - silently fail
         setUser(null);
         setError(null);

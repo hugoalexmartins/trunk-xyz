@@ -1,42 +1,16 @@
-import { z } from 'zod';
-import { createTRPCRouter, protectedProcedure } from '../trpc';
-import type { Prisma } from '@prisma/client';
-import { EventType, EventStatus } from '@prisma/client';
-
-// Zod schemas for validation
-const eventMetadataSchema = z.any().optional();
-
-const createEventSchema = z.object({
-  type: z.nativeEnum(EventType),
-  title: z.string().min(1).max(255),
-  description: z.string().max(1000).optional(),
-  pipelineId: z.string().uuid().optional(),
-  status: z.nativeEnum(EventStatus).optional().default(EventStatus.PENDING),
-  metadata: eventMetadataSchema,
-});
-
-const updateEventSchema = z.object({
-  title: z.string().min(1).max(255).optional(),
-  description: z.string().max(1000).optional(),
-  status: z.nativeEnum(EventStatus).optional(),
-  metadata: eventMetadataSchema,
-});
-
-const listEventsFilterSchema = z.object({
-  type: z.nativeEnum(EventType).optional(),
-  status: z.nativeEnum(EventStatus).optional(),
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
-  pipelineId: z.string().uuid().optional(),
-  search: z.string().optional(),
-  cursor: z.string().optional(),
-  limit: z.number().int().positive().max(100).default(20),
-});
+import { createTRPCRouter, protectedProcedure } from "../trpc";
+import type { Prisma } from "@prisma/client";
+import { z } from "zod";
+import {
+  createEventInputSchema,
+  updateEventInputSchema,
+  listEventsInputSchema,
+} from "@/web/schemas/events";
 
 export const eventsRouter = createTRPCRouter({
   // CRUD operations
   create: protectedProcedure
-    .input(createEventSchema)
+    .input(createEventInputSchema)
     .mutation(async ({ ctx, input }) => {
       return ctx.prisma.event.create({
         data: {
@@ -76,17 +50,23 @@ export const eventsRouter = createTRPCRouter({
     }),
 
   update: protectedProcedure
-    .input(z.object({ id: z.string(), data: updateEventSchema }))
+    .input(updateEventInputSchema)
     .mutation(async ({ ctx, input }) => {
-      const updateData: Prisma.EventUpdateInput = {};
-      if (input.data.title !== undefined) updateData.title = input.data.title;
-      if (input.data.description !== undefined) updateData.description = input.data.description;
-      if (input.data.status !== undefined) updateData.status = input.data.status;
-      if (input.data.metadata !== undefined) updateData.metadata = input.data.metadata as Prisma.InputJsonValue;
+      const { id, ...updateData } = input;
+      const data: Prisma.EventUpdateInput = {};
+      if (updateData.type !== undefined) data.type = updateData.type;
+      if (updateData.title !== undefined) data.title = updateData.title;
+      if (updateData.description !== undefined)
+        data.description = updateData.description;
+      if (updateData.pipelineId !== undefined)
+        data.pipelineId = updateData.pipelineId;
+      if (updateData.status !== undefined) data.status = updateData.status;
+      if (updateData.metadata !== undefined)
+        data.metadata = updateData.metadata as Prisma.InputJsonValue;
 
       return ctx.prisma.event.update({
-        where: { id: input.id },
-        data: updateData,
+        where: { id },
+        data,
         include: {
           creator: {
             select: {
@@ -113,12 +93,12 @@ export const eventsRouter = createTRPCRouter({
         pipelineId: z.string().uuid(),
         cursor: z.string().optional(),
         limit: z.number().int().positive().max(100).default(20),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       const events = await ctx.prisma.event.findMany({
         where: { pipelineId: input.pipelineId },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         take: input.limit + 1,
         cursor: input.cursor ? { id: input.cursor } : undefined,
         skip: input.cursor ? 1 : undefined,
@@ -144,37 +124,13 @@ export const eventsRouter = createTRPCRouter({
     }),
 
   listAll: protectedProcedure
-    .input(listEventsFilterSchema)
+    .input(listEventsInputSchema)
     .query(async ({ ctx, input }) => {
-      const where: Prisma.EventWhereInput = {};
-
-      if (input.type) where.type = input.type;
-      if (input.status) where.status = input.status;
-      if (input.pipelineId) where.pipelineId = input.pipelineId;
-
-      if (input.startDate || input.endDate) {
-        where.createdAt = {};
-        if (input.startDate) {
-          where.createdAt.gte = input.startDate;
-        }
-        if (input.endDate) {
-          where.createdAt.lte = input.endDate;
-        }
-      }
-
-      if (input.search) {
-        where.OR = [
-          { title: { contains: input.search, mode: 'insensitive' } },
-          { description: { contains: input.search, mode: 'insensitive' } },
-        ];
-      }
-
       const events = await ctx.prisma.event.findMany({
-        where,
-        orderBy: { createdAt: 'desc' },
-        take: input.limit + 1,
-        cursor: input.cursor ? { id: input.cursor } : undefined,
-        skip: input.cursor ? 1 : undefined,
+        skip: input.skip ? 1 : undefined,
+        take: input.take,
+        orderBy: { [input.sortBy]: input.sortOrder },
+        where: {},
         include: {
           creator: {
             select: {

@@ -40,7 +40,7 @@ export function verifyToken(token: string): TokenPayload | null {
   try {
     const payload = jwt.verify(token, JWT_SECRET) as TokenPayload;
     return payload;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
