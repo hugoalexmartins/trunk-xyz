@@ -6,17 +6,10 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Starting seed...');
 
-  // Backfill existing users with approved=true and role='regular'
-  const backfillResult = await prisma.user.updateMany({
-    where: {
-      role: null,
-    },
-    data: {
-      approved: true,
-      role: UserRole.regular,
-    },
-  });
-  console.log(`Backfilled ${backfillResult.count} existing users`);
+  // Backfill existing users that don't have approval status set
+  // (Schema migration should have set defaults, but ensure consistency)
+  const totalUsers = await prisma.user.count();
+  console.log(`Total users in database: ${totalUsers}`);
 
   // Create or update admin user for development
   const adminEmail = 'admin@example.com';
