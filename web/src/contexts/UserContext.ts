@@ -4,6 +4,8 @@ export interface User {
   id: string;
   email: string;
   createdAt?: string;
+  approved: boolean;
+  role: 'admin' | 'regular';
 }
 
 export interface UserContextType {

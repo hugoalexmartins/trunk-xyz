@@ -25,6 +25,8 @@ export const useLogin = () => {
       context.setUser({
         id: result.id,
         email: result.email,
+        approved: result.approved,
+        role: result.role,
       });
 
       return result;
