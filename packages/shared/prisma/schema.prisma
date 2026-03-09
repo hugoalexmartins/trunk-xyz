@@ -26,11 +26,18 @@ enum EventStatus {
   ARCHIVED
 }
 
+enum UserRole {
+  admin
+  regular
+}
+
 model User {
   id        String    @id @default(cuid())
   email     String    @unique
   passwordHash String
-  isApproved Boolean  @default(false)
+  approved  Boolean   @default(false)
+  role      UserRole  @default(regular)
+  approvedBy String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   events    Event[]

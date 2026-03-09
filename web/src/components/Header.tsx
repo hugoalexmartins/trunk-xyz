@@ -52,6 +52,14 @@ export function Header() {
                 >
                   Recruitment
                 </Link>
+                {user.role === 'admin' && (
+                  <Link
+                    href="/admin/users"
+                    className="text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-semibold"
+                  >
+                    Admin
+                  </Link>
+                )}
               </>
             )}
           </nav>

@@ -146,6 +146,62 @@ Wrap page content with `ProtectedRoute` component:
 
 All event endpoints require authentication via `protectedProcedure`.
 
+## Role-Based Access Control (RBAC)
+
+The application implements a two-role system for managing user permissions:
+
+### User Roles
+- **admin**: Can manage user approvals and access admin dashboard
+- **regular**: Standard user with access to events and timeline features
+
+### Approval Workflow
+1. New users signup with `approved=false`, awaiting admin approval
+2. Admins view pending users at `/admin/users`
+3. Admins approve or reject pending users
+4. Approved users can login and access the application
+5. Admins can disable/enable approved users at any time
+
+### Key Files
+- **User Model**: `/packages/shared/prisma/schema.prisma` - User schema with `role` and `approved` fields
+- **Admin Router**: `/web/src/server/api/routers/admin.ts` - tRPC endpoints for user management
+- **Protected Route**: `/web/src/components/ProtectedRoute.tsx` - Route protection with role and approval checks
+- **Admin Page**: `/web/src/pages/admin/users.tsx` - Admin user management interface
+- **Pending Approval**: `/web/src/pages/auth/pending-approval.tsx` - Screen shown to users awaiting approval
+
+### Usage
+
+**Protect a route for admin users only:**
+```typescript
+<ProtectedRoute requiredRole="admin">
+  <AdminContent />
+</ProtectedRoute>
+```
+
+**Check user approval and role:**
+```typescript
+const { user } = useAuth();
+if (!user.approved) {
+  // User is pending approval
+}
+if (user.role === 'admin') {
+  // Show admin controls
+}
+```
+
+### Admin API Endpoints
+- `GET /api/trpc/admin.listUsers` - Get all users with approval status
+- `POST /api/trpc/admin.approveUser` - Approve a pending user
+- `POST /api/trpc/admin.rejectUser` - Reject/delete a pending user
+- `POST /api/trpc/admin.disableUser` - Disable an approved user
+- `POST /api/trpc/admin.enableUser` - Re-enable a disabled user
+
+### Development Seeding
+To create an admin user for development:
+```sh
+pnpm --filter=shared run db:seed
+```
+This creates `admin@example.com` with password `AdminPassword123!`
+
 ## Development Guidelines
 
 ### Frontend Features

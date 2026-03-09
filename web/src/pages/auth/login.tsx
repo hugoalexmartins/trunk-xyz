@@ -15,9 +15,16 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await mutate(email, password)
-      const returnUrl = (router.query.returnUrl as string) || '/timeline'
-      router.push(returnUrl)
+      const result = await mutate(email, password)
+      // Check if user is approved
+      if (!result.approved) {
+        // Redirect to pending approval page
+        router.push('/auth/pending-approval')
+      } else {
+        // Redirect to timeline or return URL
+        const returnUrl = (router.query.returnUrl as string) || '/timeline'
+        router.push(returnUrl)
+      }
     } catch {
       // Error is handled by the hook
     }

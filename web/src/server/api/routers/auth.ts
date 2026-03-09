@@ -40,12 +40,13 @@ export const authRouter = createTRPCRouter({
         data: {
           email: input.email,
           passwordHash,
-          isApproved: true, // Auto-approve for Phase 1
+          approved: false, // Pending admin approval
+          role: "regular", // Default to regular user
         },
       });
 
       return {
-        message: "User created successfully. Please log in.",
+        message: "User created successfully. Awaiting admin approval.",
       };
     }),
 
@@ -86,6 +87,8 @@ export const authRouter = createTRPCRouter({
     return {
       id: user.id,
       email: user.email,
+      approved: user.approved,
+      role: user.role,
     };
   }),
 
@@ -106,6 +109,8 @@ export const authRouter = createTRPCRouter({
       select: {
         id: true,
         email: true,
+        approved: true,
+        role: true,
         createdAt: true,
       },
     });
