@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
+import { describe, it, expect, beforeEach } from '@jest/globals';
 import { TRPCError } from '@trpc/server';
 import { adminRouter } from '../admin';
-import { PrismaClient } from '@prisma/client';
+import type { Context } from '../../trpc';
 
 /**
  * Admin Router Unit Tests
@@ -18,11 +18,12 @@ const mockPrisma = {
   },
 };
 
-const createMockContext = (userId: string, role: 'admin' | 'regular' = 'admin') => ({
+const createMockContext = (userId: string): Context => ({
   user: {
     sub: userId,
+    email: `user-${userId}@example.com`,
   },
-  prisma: mockPrisma,
+  prisma: mockPrisma as any,
 });
 
 describe('Admin Router', () => {
@@ -33,14 +34,12 @@ describe('Admin Router', () => {
   describe('listUsers', () => {
     it('should require admin role', async () => {
       const adminId = 'admin-123';
-      const ctx = createMockContext(adminId, 'regular');
+      const ctx = createMockContext(adminId);
 
       mockPrisma.user.findUnique.mockResolvedValueOnce({ id: adminId, role: 'regular' });
 
-      const caller = adminRouter.createCaller(ctx);
-
       try {
-        await caller.listUsers();
+        await adminRouter.createCaller(ctx).listUsers();
         expect(true).toBe(false); // Should throw
       } catch (error) {
         expect(error).toBeInstanceOf(TRPCError);
@@ -59,8 +58,7 @@ describe('Admin Router', () => {
       mockPrisma.user.findUnique.mockResolvedValueOnce({ id: adminId, role: 'admin' });
       mockPrisma.user.findMany.mockResolvedValueOnce(mockUsers);
 
-      const caller = adminRouter.createCaller(ctx);
-      const result = await caller.listUsers();
+      const result = await adminRouter.createCaller(ctx).listUsers();
 
       expect(result).toEqual(mockUsers);
       expect(mockPrisma.user.findMany).toHaveBeenCalledWith({
@@ -82,8 +80,7 @@ describe('Admin Router', () => {
       mockPrisma.user.findUnique.mockResolvedValueOnce({ id: adminId, role: 'admin' });
       mockPrisma.user.findMany.mockResolvedValueOnce([]);
 
-      const caller = adminRouter.createCaller(ctx);
-      await caller.listUsers();
+      await adminRouter.createCaller(ctx).listUsers();
 
       expect(mockPrisma.user.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -97,14 +94,12 @@ describe('Admin Router', () => {
     it('should require admin role', async () => {
       const adminId = 'admin-123';
       const userId = 'user-456';
-      const ctx = createMockContext(adminId, 'regular');
+      const ctx = createMockContext(adminId);
 
       mockPrisma.user.findUnique.mockResolvedValueOnce({ id: adminId, role: 'regular' });
 
-      const caller = adminRouter.createCaller(ctx);
-
       try {
-        await caller.approveUser({ userId });
+        await adminRouter.createCaller(ctx).approveUser({ userId });
         expect(true).toBe(false); // Should throw
       } catch (error) {
         expect(error).toBeInstanceOf(TRPCError);
@@ -123,8 +118,7 @@ describe('Admin Router', () => {
         .mockResolvedValueOnce({ id: userId }); // Second call to check user exists
       mockPrisma.user.update.mockResolvedValueOnce(updatedUser);
 
-      const caller = adminRouter.createCaller(ctx);
-      const result = await caller.approveUser({ userId });
+      const result = await adminRouter.createCaller(ctx).approveUser({ userId });
 
       expect(result).toEqual(updatedUser);
       expect(mockPrisma.user.update).toHaveBeenCalledWith({
@@ -158,8 +152,7 @@ describe('Admin Router', () => {
         .mockResolvedValueOnce({ id: userId });
       mockPrisma.user.update.mockResolvedValueOnce(updatedUser);
 
-      const caller = adminRouter.createCaller(ctx);
-      const result = await caller.approveUser({ userId });
+      const result = await adminRouter.createCaller(ctx).approveUser({ userId });
 
       expect(result).toHaveProperty('id');
       expect(result).toHaveProperty('email');
@@ -176,10 +169,8 @@ describe('Admin Router', () => {
         .mockResolvedValueOnce({ id: adminId, role: 'admin' })
         .mockResolvedValueOnce(null); // User not found
 
-      const caller = adminRouter.createCaller(ctx);
-
       try {
-        await caller.approveUser({ userId });
+        await adminRouter.createCaller(ctx).approveUser({ userId });
         expect(true).toBe(false); // Should throw
       } catch (error) {
         expect(error).toBeInstanceOf(TRPCError);
@@ -192,14 +183,12 @@ describe('Admin Router', () => {
     it('should require admin role', async () => {
       const adminId = 'admin-123';
       const userId = 'user-456';
-      const ctx = createMockContext(adminId, 'regular');
+      const ctx = createMockContext(adminId);
 
       mockPrisma.user.findUnique.mockResolvedValueOnce({ id: adminId, role: 'regular' });
 
-      const caller = adminRouter.createCaller(ctx);
-
       try {
-        await caller.disableUser({ userId });
+        await adminRouter.createCaller(ctx).disableUser({ userId });
         expect(true).toBe(false); // Should throw
       } catch (error) {
         expect(error).toBeInstanceOf(TRPCError);
@@ -218,8 +207,7 @@ describe('Admin Router', () => {
         .mockResolvedValueOnce({ id: userId });
       mockPrisma.user.update.mockResolvedValueOnce(updatedUser);
 
-      const caller = adminRouter.createCaller(ctx);
-      const result = await caller.disableUser({ userId });
+      const result = await adminRouter.createCaller(ctx).disableUser({ userId });
 
       expect(result.approved).toBe(false);
       expect(mockPrisma.user.update).toHaveBeenCalledWith(
@@ -238,10 +226,8 @@ describe('Admin Router', () => {
         .mockResolvedValueOnce({ id: adminId, role: 'admin' })
         .mockResolvedValueOnce(null);
 
-      const caller = adminRouter.createCaller(ctx);
-
       try {
-        await caller.disableUser({ userId });
+        await adminRouter.createCaller(ctx).disableUser({ userId });
         expect(true).toBe(false); // Should throw
       } catch (error) {
         expect(error).toBeInstanceOf(TRPCError);
@@ -254,14 +240,12 @@ describe('Admin Router', () => {
     it('should require admin role', async () => {
       const adminId = 'admin-123';
       const userId = 'user-456';
-      const ctx = createMockContext(adminId, 'regular');
+      const ctx = createMockContext(adminId);
 
       mockPrisma.user.findUnique.mockResolvedValueOnce({ id: adminId, role: 'regular' });
 
-      const caller = adminRouter.createCaller(ctx);
-
       try {
-        await caller.rejectUser({ userId });
+        await adminRouter.createCaller(ctx).rejectUser({ userId });
         expect(true).toBe(false); // Should throw
       } catch (error) {
         expect(error).toBeInstanceOf(TRPCError);
@@ -279,8 +263,7 @@ describe('Admin Router', () => {
         .mockResolvedValueOnce({ id: userId });
       mockPrisma.user.delete.mockResolvedValueOnce({ id: userId });
 
-      const caller = adminRouter.createCaller(ctx);
-      const result = await caller.rejectUser({ userId });
+      const result = await adminRouter.createCaller(ctx).rejectUser({ userId });
 
       expect(result.success).toBe(true);
       expect(mockPrisma.user.delete).toHaveBeenCalledWith({
@@ -293,14 +276,12 @@ describe('Admin Router', () => {
     it('should require admin role', async () => {
       const adminId = 'admin-123';
       const userId = 'user-456';
-      const ctx = createMockContext(adminId, 'regular');
+      const ctx = createMockContext(adminId);
 
       mockPrisma.user.findUnique.mockResolvedValueOnce({ id: adminId, role: 'regular' });
 
-      const caller = adminRouter.createCaller(ctx);
-
       try {
-        await caller.enableUser({ userId });
+        await adminRouter.createCaller(ctx).enableUser({ userId });
         expect(true).toBe(false); // Should throw
       } catch (error) {
         expect(error).toBeInstanceOf(TRPCError);
@@ -319,8 +300,7 @@ describe('Admin Router', () => {
         .mockResolvedValueOnce({ id: userId });
       mockPrisma.user.update.mockResolvedValueOnce(updatedUser);
 
-      const caller = adminRouter.createCaller(ctx);
-      const result = await caller.enableUser({ userId });
+      const result = await adminRouter.createCaller(ctx).enableUser({ userId });
 
       expect(result.approved).toBe(true);
     });
