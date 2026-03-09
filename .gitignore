@@ -8,6 +8,7 @@ build/
 .next/
 out/
 .turbo/
+.next-check/
 
 # Development
 .env
