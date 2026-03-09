@@ -79,12 +79,12 @@
 
 ## 11. Testing & Verification
 
-- [ ] 11.1 Write unit test for admin.listUsers() endpoint
-- [ ] 11.2 Write unit test for admin.approveUser() endpoint with role check
-- [ ] 11.3 Write unit test for admin.disableUser() endpoint
-- [ ] 11.4 Write integration test: signup creates pending user, admin approves, user can login
-- [ ] 11.5 Write integration test: pending user cannot access protected routes
-- [ ] 11.6 Write integration test: disabled user cannot login or access routes
+- [x] 11.1 Write unit test for admin.listUsers() endpoint
+- [x] 11.2 Write unit test for admin.approveUser() endpoint with role check
+- [x] 11.3 Write unit test for admin.disableUser() endpoint
+- [x] 11.4 Write integration test: signup creates pending user, admin approves, user can login
+- [x] 11.5 Write integration test: pending user cannot access protected routes
+- [x] 11.6 Write integration test: disabled user cannot login or access routes
 - [ ] 11.7 Manual test: verify admin menu only appears for admins
 - [ ] 11.8 Manual test: verify non-admin users are redirected from /admin/users
 - [x] 11.9 Run all CI checks locally: `pnpm test`, `pnpm tc`, `pnpm lint`, `pnpm build:check` (TypeScript check passed)
