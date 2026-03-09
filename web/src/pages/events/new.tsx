@@ -21,10 +21,10 @@ function NewEventPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950">
+    <div className="min-h-screen bg-canvas">
       <Header />
       <main>
-        <Container className="py-8">
+        <Container className="py-12">
           <div className="mb-6">
             <Link href="/timeline">
               <Button variant="secondary" className="mb-6">

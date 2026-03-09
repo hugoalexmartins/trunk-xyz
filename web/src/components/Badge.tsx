@@ -2,38 +2,61 @@ import React from 'react'
 import type { EventType } from '@prisma/client'
 import { EventType as EventTypeEnum } from '@prisma/client'
 
-type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info'
+type BadgeColor = 'cyan' | 'amber' | 'magenta'
 
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: BadgeVariant
+  color?: BadgeColor
   eventType?: EventType
   children: React.ReactNode
 }
 
-const variantClasses: Record<BadgeVariant, string> = {
-  default: 'bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200',
-  success: 'bg-success-100 dark:bg-success-900 text-success-800 dark:text-success-200',
-  warning: 'bg-warning-100 dark:bg-warning-900 text-warning-800 dark:text-warning-200',
-  error: 'bg-error-100 dark:bg-error-900 text-error-800 dark:text-error-200',
-  info: 'bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200',
+/**
+ * Neo-brutalism Badge component
+ * Features: pill shape, thick border, slight rotation, vibrant colors
+ */
+const colorMap: Record<BadgeColor, string> = {
+  cyan: 'bg-primary text-ink border-ink',
+  amber: 'bg-secondary text-ink border-ink',
+  magenta: 'bg-accent text-white border-ink',
 }
 
-const eventTypeVariants: Record<EventType, BadgeVariant> = {
-  [EventTypeEnum.APPLICATION]: 'info',
-  [EventTypeEnum.SCREENING]: 'warning',
-  [EventTypeEnum.INTERVIEW]: 'info',
-  [EventTypeEnum.OFFER]: 'success',
-  [EventTypeEnum.REJECTION]: 'error',
-  [EventTypeEnum.HIRED]: 'success',
+const eventTypeColors: Record<EventType, BadgeColor> = {
+  [EventTypeEnum.APPLICATION]: 'cyan',
+  [EventTypeEnum.SCREENING]: 'amber',
+  [EventTypeEnum.INTERVIEW]: 'cyan',
+  [EventTypeEnum.OFFER]: 'magenta',
+  [EventTypeEnum.REJECTION]: 'magenta',
+  [EventTypeEnum.HIRED]: 'magenta',
 }
 
-export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ variant, eventType, className = '', children, ...props }, ref) => {
-    const finalVariant = eventType ? eventTypeVariants[eventType] : variant || 'default'
-    const baseClasses = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium'
+const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
+  ({ color, eventType, className = '', children, ...props }, ref) => {
+    const finalColor = eventType ? eventTypeColors[eventType] : color || 'cyan'
+    const baseClasses = [
+      'inline-flex',
+      'items-center',
+      'px-4',
+      'py-2',
+      'border-2',
+      'border-ink',
+      'rounded-full',
+      'text-sm',
+      'font-bold',
+      'rotate-3',
+      'transition-transform',
+      'duration-200',
+      'hover:rotate-6',
+      'prefers-reduced-motion:transition-none',
+      'prefers-reduced-motion:rotate-0',
+      'prefers-reduced-motion:hover:rotate-0',
+    ].join(' ')
 
     return (
-      <span ref={ref} className={`${baseClasses} ${variantClasses[finalVariant]} ${className}`} {...props}>
+      <span
+        ref={ref}
+        className={`${baseClasses} ${colorMap[finalColor]} ${className}`}
+        {...props}
+      >
         {children}
       </span>
     )
@@ -41,3 +64,6 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
 )
 
 Badge.displayName = 'Badge'
+
+export { Badge }
+export default Badge

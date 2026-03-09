@@ -1,3 +1,5 @@
+/* Deep Ocean Theme - Neo-Brutalism Design System */
+
 html {
   color-scheme: light;
 }
@@ -7,11 +9,33 @@ html.dark {
 }
 
 body {
-  background-color: white;
-  color: #111827;
+  background-color: #F5F9FC; /* Canvas ice blue */
+  color: #0B1929; /* Ink deep navy */
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
 }
 
 html.dark body {
   background-color: #030712;
   color: #f5f5f5;
+}
+
+/* Base element defaults */
+* {
+  border-color: #0B1929; /* Default border color to deep navy */
+}
+
+/* Strong text uses font-weight 900 */
+strong, b {
+  font-weight: 900;
+}
+
+/* Ensure links and interactive elements have good contrast */
+a {
+  color: #0B1929;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #00D9FF; /* Primary cyan on hover */
 }

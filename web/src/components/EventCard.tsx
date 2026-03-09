@@ -20,13 +20,13 @@ export function EventCard({ event, showPipelineLink = false }: EventCardProps) {
   })
 
   return (
-    <Card className="hover:shadow-lg">
+    <Card>
       <CardBody>
-        <div className="flex items-start justify-between gap-4 mb-3">
+        <div className="flex items-start justify-between gap-4 mb-4">
           <div className="flex-1">
-            <h3 className="font-semibold text-lg text-neutral-900 dark:text-neutral-50">{event.title}</h3>
+            <h3 className="font-bold text-lg text-ink">{event.title}</h3>
             {event.description && (
-              <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-2">{event.description}</p>
+              <p className="text-neutral-dark text-sm mt-3">{event.description}</p>
             )}
           </div>
           <div className="flex-shrink-0">
@@ -34,7 +34,7 @@ export function EventCard({ event, showPipelineLink = false }: EventCardProps) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-600 dark:text-neutral-400">
+        <div className="flex flex-col gap-3 mt-6 pt-4 border-t-4 border-ink text-sm text-neutral-dark">
           <div className="flex items-center justify-between">
             <time dateTime={event.createdAt?.toString()}>
               {formattedDate} at {formattedTime}
@@ -50,13 +50,13 @@ export function EventCard({ event, showPipelineLink = false }: EventCardProps) {
             {showPipelineLink && event.pipelineId && (
               <Link
                 href={`/recruitment/${event.pipelineId}`}
-                className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
+                className="text-primary font-bold hover:text-secondary transition-colors"
               >
                 View Pipeline
               </Link>
             )}
 
-            <Link href={`/events/${event.id}`} className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
+            <Link href={`/events/${event.id}`} className="text-primary font-bold hover:text-secondary transition-colors">
               Details
             </Link>
           </div>

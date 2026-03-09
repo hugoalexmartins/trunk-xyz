@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { Header } from '@/components/Header'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
+import { Card, CardBody } from '@/components/Card'
 import { useLogout } from '@/hooks/useLogout'
 
 export default function PendingApprovalPage() {
@@ -18,48 +19,44 @@ export default function PendingApprovalPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950">
+    <div className="min-h-screen bg-canvas">
       <Header />
       <main>
-        <Container className="py-12">
-          <div className="max-w-md mx-auto text-center">
-            <div className="mb-6">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-yellow-50 dark:bg-yellow-900/20">
-                <span className="text-3xl">⏳</span>
+        <Container className="py-12 flex items-center justify-center min-h-[calc(100vh-theme(spacing.32))]">
+          <Card className="w-full max-w-md" header="Pending Approval" headerColor="amber">
+            <CardBody className="text-center space-y-6">
+              <div className="text-5xl">⏳</div>
+
+              <div>
+                <p className="text-ink font-bold mb-4">
+                  Your account is awaiting approval from an administrator. You will receive an email notification once your account has been reviewed and approved.
+                </p>
+
+                <div className="border-4 border-secondary bg-neutral-light p-4">
+                  <p className="text-sm text-ink font-bold">
+                    Please allow 1-2 business days for approval. If you have questions, contact our support team.
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-50 mb-2">
-              Pending Approval
-            </h1>
-
-            <p className="text-neutral-600 dark:text-neutral-400 mb-8">
-              Your account is awaiting approval from an administrator. You will receive an email notification once your account has been reviewed and approved.
-            </p>
-
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-8">
-              <p className="text-sm text-blue-700 dark:text-blue-400">
-                Please allow 1-2 business days for approval. If you have questions, contact our support team.
-              </p>
-            </div>
-
-            <Button
-              onClick={handleLogout}
-              variant="primary"
-              className="w-full"
-            >
-              Logout
-            </Button>
-
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-6">
-              <button
-                onClick={() => router.push('/auth/login')}
-                className="text-primary-600 dark:text-primary-400 hover:underline"
+              <Button
+                onClick={handleLogout}
+                variant="primary"
+                className="w-full"
               >
-                Go back to login
-              </button>
-            </p>
-          </div>
+                Logout
+              </Button>
+
+              <p className="text-sm text-ink">
+                <button
+                  onClick={() => router.push('/auth/login')}
+                  className="text-primary font-bold hover:text-secondary transition-colors"
+                >
+                  Go back to login
+                </button>
+              </p>
+            </CardBody>
+          </Card>
         </Container>
       </main>
     </div>

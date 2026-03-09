@@ -16,10 +16,10 @@ function TimelinePageContent() {
   const events = data?.events || []
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950">
+    <div className="min-h-screen bg-canvas">
       <Header />
       <main>
-        <Container className="py-8">
+        <Container className="py-12">
           {/* Page Header */}
           <PageHeader title="Timeline" description="View all events in chronological order">
             <div className="flex flex-col sm:flex-row gap-3">

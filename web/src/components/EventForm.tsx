@@ -124,7 +124,7 @@ export function EventForm({ pipelineId, eventType, onSuccess }: EventFormProps) 
           )}
 
           <div className="pt-4">
-            <Button type="submit" variant="primary" isLoading={isLoading} className="w-full">
+            <Button type="submit" variant="primary" className="w-full" disabled={isLoading}>
               {isLoading ? 'Creating...' : 'Create Event'}
             </Button>
           </div>

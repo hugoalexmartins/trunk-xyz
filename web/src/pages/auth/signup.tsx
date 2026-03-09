@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 import { Header } from '@/components/Header'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
+import { Input } from '@/components/Input'
+import { Card, CardBody } from '@/components/Card'
 import { useSignup } from '@/hooks/useSignup'
 
 export default function SignupPage() {
@@ -57,87 +59,73 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950">
+    <div className="min-h-screen bg-canvas">
       <Header />
       <main>
-        <Container className="py-8">
-          <div className="max-w-md mx-auto">
-            <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-50 mb-2">Sign Up</h1>
-            <p className="text-neutral-600 dark:text-neutral-400 mb-8">Create a new account</p>
+        <Container className="py-12 flex items-center justify-center min-h-[calc(100vh-theme(spacing.32))]">
+          <Card className="w-full max-w-md" header="Sign Up" headerColor="cyan">
+            <CardBody className="space-y-6">
+              <p className="text-ink font-bold">Create a new account</p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {(error || validationError) && (
-                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm">
-                  {error || validationError}
-                </div>
-              )}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {(error || validationError) && (
+                  <div className="p-4 bg-accent border-4 border-accent rounded-none text-white font-bold text-sm">
+                    {error || validationError}
+                  </div>
+                )}
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                  Email
-                </label>
-                <input
+                <Input
                   id="email"
                   type="email"
+                  label="Email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="you@example.com"
                   disabled={isLoading}
                 />
-              </div>
 
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                  Password
-                </label>
-                <input
+                <Input
                   id="password"
                   type="password"
+                  label="Password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="••••••••"
+                  helperText="Minimum 8 characters"
                   disabled={isLoading}
                 />
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Minimum 8 characters</p>
-              </div>
 
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                  Confirm Password
-                </label>
-                <input
+                <Input
                   id="confirmPassword"
                   type="password"
+                  label="Confirm Password"
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="••••••••"
                   disabled={isLoading}
                 />
-              </div>
 
-              <Button
-                type="submit"
-                variant="primary"
-                className="w-full"
-                disabled={isLoading}
-              >
-                {isLoading ? 'Creating account...' : 'Sign Up'}
-              </Button>
-            </form>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  className="w-full"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Creating account...' : 'Sign Up'}
+                </Button>
+              </form>
 
-            <p className="text-center text-sm text-neutral-600 dark:text-neutral-400 mt-6">
-              Already have an account?{' '}
-              <Link href="/auth/login" className="text-primary-600 dark:text-primary-400 hover:underline">
-                Sign in
-              </Link>
-            </p>
-          </div>
+              <p className="text-center text-sm text-ink font-bold">
+                Already have an account?{' '}
+                <Link href="/auth/login" className="text-primary hover:text-secondary transition-colors">
+                  Sign in
+                </Link>
+              </p>
+            </CardBody>
+          </Card>
         </Container>
       </main>
     </div>

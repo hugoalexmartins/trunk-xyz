@@ -48,10 +48,10 @@ function RecruitmentPageContent() {
   }, [data?.events])
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950">
+    <div className="min-h-screen bg-canvas">
       <Header />
       <main>
-        <Container className="py-8">
+        <Container className="py-12">
           {/* Page Header */}
           <PageHeader title="Recruitment Pipeline" description="Track candidate journeys through the recruitment process">
             <div className="flex flex-col sm:flex-row gap-3">
@@ -84,14 +84,14 @@ function RecruitmentPageContent() {
                     <CardBody>
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="font-semibold text-lg text-neutral-900 dark:text-neutral-50">
+                          <h3 className="font-bold text-lg text-ink">
                             {pipeline.pipelineId.substring(0, 8)}...
                           </h3>
-                          <div className="flex items-center gap-2 mt-2">
-                            <Badge variant="info">{pipeline.eventCount} event{pipeline.eventCount !== 1 ? 's' : ''}</Badge>
+                          <div className="flex items-center gap-2 mt-3">
+                            <Badge color="cyan">{pipeline.eventCount} event{pipeline.eventCount !== 1 ? 's' : ''}</Badge>
                           </div>
                         </div>
-                        <time className="text-sm text-neutral-600 dark:text-neutral-400">
+                        <time className="text-sm text-neutral-dark font-bold">
                           {pipeline.latestDate.toLocaleDateString()}
                         </time>
                       </div>
@@ -104,8 +104,8 @@ function RecruitmentPageContent() {
 
           {/* Recent Events */}
           {data?.events && (
-            <div className="mt-8">
-              <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">Recent Activity</h2>
+            <div className="mt-12">
+              <h2 className="text-3xl font-bold text-ink mb-6">Recent Activity</h2>
               <Timeline events={data.events.slice(0, 10)} groupByPipeline={true} />
             </div>
           )}

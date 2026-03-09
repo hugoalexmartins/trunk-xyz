@@ -12,31 +12,19 @@ const config: Config = {
       white: '#ffffff',
       black: '#000000',
       transparent: 'transparent',
-      // Primary colors (brand blues)
-      primary: {
-        50: '#f0f9ff',
-        100: '#e0f2fe',
-        200: '#bae6fd',
-        300: '#7dd3fc',
-        400: '#38bdf8',
-        500: '#0ea5e9',
-        600: '#0284c7',
-        700: '#0369a1',
-        800: '#075985',
-        900: '#0c3d66',
-      },
-      // Secondary colors (supporting purples)
-      secondary: {
-        50: '#faf5ff',
-        100: '#f3e8ff',
-        200: '#e9d5ff',
-        300: '#d8b4fe',
-        400: '#c084fc',
-        500: '#a855f7',
-        600: '#9333ea',
-        700: '#7e22ce',
-        800: '#6b21a8',
-        900: '#581c87',
+      // Deep Ocean color palette - neo-brutalism theme
+      canvas: '#F5F9FC', // Ice blue background
+      ink: '#0B1929', // Deep navy for text
+      primary: '#00D9FF', // Cyan accent
+      secondary: '#FFB81C', // Amber accent
+      accent: '#FF4D7D', // Magenta for alerts/special states
+      // Neutral variants
+      neutral: {
+        light: '#F5F9FC',
+        lighter: '#E8F1F7',
+        DEFAULT: '#8B99A6',
+        dark: '#4A5A6A',
+        darker: '#2A3A4A',
       },
       // Semantic colors
       success: {
@@ -75,30 +63,13 @@ const config: Config = {
         800: '#991b1b',
         900: '#7f1d1d',
       },
-      // Neutral colors (grays)
-      neutral: {
-        50: '#fafafa',
-        100: '#f5f5f5',
-        200: '#e5e5e5',
-        300: '#d4d4d4',
-        400: '#a3a3a3',
-        500: '#737373',
-        600: '#525252',
-        700: '#404040',
-        800: '#262626',
-        900: '#171717',
-        950: '#0a0a0a',
-      },
     },
     fontFamily: {
       sans: [
+        '"Space Grotesk"',
         '-apple-system',
         'BlinkMacSystemFont',
         '"Segoe UI"',
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        '"Noto Sans"',
         'sans-serif',
       ],
     },
@@ -137,6 +108,11 @@ const config: Config = {
       md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
       lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
       xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+      // Neo-brutalism shadows (hard offset, no blur)
+      'neo-sm': '2px 2px 0px 0px #0B1929',
+      'neo-md': '4px 4px 0px 0px #0B1929',
+      'neo-lg': '8px 8px 0px 0px #0B1929',
+      'neo-xl': '12px 12px 0px 0px #0B1929',
     },
     borderRadius: {
       none: '0',
