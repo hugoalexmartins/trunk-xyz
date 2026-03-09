@@ -1,19 +1,19 @@
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect } from "@jest/globals";
 
 /**
  * User Approval Workflow Integration Tests
  * Tests the complete flow of user signup, approval, and access
  */
 
-describe('User Approval Workflow', () => {
+describe("User Approval Workflow", () => {
   /**
    * Note: These tests document the expected behavior of the approval workflow.
    * Full end-to-end testing would require test database setup and API client.
    * The implementation has been verified through manual testing in dev environment.
    */
 
-  describe('Signup to Approval Flow', () => {
-    it('should create pending user on signup', () => {
+  describe("Signup to Approval Flow", () => {
+    it("should create pending user on signup", () => {
       /**
        * Verifies that:
        * 1. New users created via signup endpoint have approved=false
@@ -26,7 +26,7 @@ describe('User Approval Workflow', () => {
       expect(true).toBe(true);
     });
 
-    it('should prevent pending user from accessing app', () => {
+    it("should prevent pending user from accessing app", () => {
       /**
        * Verifies that:
        * 1. Pending users (approved=false) cannot access protected routes
@@ -40,7 +40,7 @@ describe('User Approval Workflow', () => {
       expect(true).toBe(true);
     });
 
-    it('should prevent pending user from accessing protected routes', () => {
+    it("should prevent pending user from accessing protected routes", () => {
       /**
        * Verifies that:
        * 1. Pending users attempting to access /timeline are blocked
@@ -56,8 +56,8 @@ describe('User Approval Workflow', () => {
     });
   });
 
-  describe('Admin Approval Process', () => {
-    it('admin should be able to approve pending user', () => {
+  describe("Admin Approval Process", () => {
+    it("admin should be able to approve pending user", () => {
       /**
        * Verifies that:
        * 1. Admin can call admin.approveUser() endpoint
@@ -73,7 +73,7 @@ describe('User Approval Workflow', () => {
       expect(true).toBe(true);
     });
 
-    it('approved user should access application', () => {
+    it("approved user should access application", () => {
       /**
        * Verifies that:
        * 1. After approval, user can login successfully
@@ -89,8 +89,8 @@ describe('User Approval Workflow', () => {
     });
   });
 
-  describe('User Disable Flow', () => {
-    it('disabled user cannot login or access routes', () => {
+  describe("User Disable Flow", () => {
+    it("disabled user cannot login or access routes", () => {
       /**
        * Verifies that:
        * 1. Admin can call admin.disableUser() endpoint
@@ -106,7 +106,7 @@ describe('User Approval Workflow', () => {
       expect(true).toBe(true);
     });
 
-    it('disabled user can be re-enabled', () => {
+    it("disabled user can be re-enabled", () => {
       /**
        * Verifies that:
        * 1. Admin can call admin.enableUser() endpoint
@@ -123,8 +123,8 @@ describe('User Approval Workflow', () => {
     });
   });
 
-  describe('Role-Based Access Control', () => {
-    it('only admin users can access admin endpoints', () => {
+  describe("Role-Based Access Control", () => {
+    it("only admin users can access admin endpoints", () => {
       /**
        * Verifies that:
        * 1. Regular users cannot call admin.listUsers()
@@ -139,7 +139,7 @@ describe('User Approval Workflow', () => {
       expect(true).toBe(true);
     });
 
-    it('only admin users can view /admin/users page', () => {
+    it("only admin users can view /admin/users page", () => {
       /**
        * Verifies that:
        * 1. Regular users cannot navigate to /admin/users
@@ -155,7 +155,7 @@ describe('User Approval Workflow', () => {
       expect(true).toBe(true);
     });
 
-    it('admin link only visible to admin users', () => {
+    it("admin link only visible to admin users", () => {
       /**
        * Verifies that:
        * 1. Header shows "Admin" link only to admin users
@@ -172,8 +172,8 @@ describe('User Approval Workflow', () => {
     });
   });
 
-  describe('Database Seeding', () => {
-    it('seed creates admin user for development', () => {
+  describe("Database Seeding", () => {
+    it("seed creates admin user for development", () => {
       /**
        * Verifies that:
        * 1. Running db:seed creates admin@example.com user
