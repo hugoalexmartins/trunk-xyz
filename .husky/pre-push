@@ -1,0 +1,15 @@
+echo "🔍 Running full checks before push..."
+
+echo "\n▶ TypeScript..."
+pnpm tc || { echo "❌ TypeScript failed. Push aborted."; exit 1; }
+
+echo "\n▶ Lint..."
+pnpm run lint || { echo "❌ Lint failed. Push aborted."; exit 1; }
+
+echo "\n▶ Tests..."
+pnpm --filter=web test -- --passWithNoTests || { echo "❌ Tests failed. Push aborted."; exit 1; }
+
+echo "\n▶ Build check..."
+pnpm build:check || { echo "❌ Build failed. Push aborted."; exit 1; }
+
+echo "\n✅ All checks passed. Pushing..."
