@@ -15,13 +15,17 @@ const clientTestConfig = {
 
 const asyncServerTestConfig = {
   displayName: "async-server",
-  testMatch: ["/**/__tests__/**/*.[jt]s?(x)", "/**/*.test.[jt]s?(x)", "/**/*.spec.[jt]s?(x)"],
+  testMatch: [
+    "/**/__tests__/**/*.[jt]s?(x)",
+    "/**/*.test.[jt]s?(x)",
+    "/**/*.spec.[jt]s?(x)",
+  ],
   testPathIgnorePatterns: ["/.next/", "/node_modules/", ".*\\.clienttest\\."],
   testEnvironment: "node",
 };
 
 // To avoid the "Cannot use import statement outside a module" errors while transforming ESM.
-// jsonpath-plus is needed because @langfuse/shared barrel exports evals/utilities which imports it
+// jsonpath-plus is needed because /shared barrel exports evals/utilities which imports it
 const esModules = ["superjson", "jsonpath-plus"];
 
 // Add any custom config to be passed to Jest
@@ -36,7 +40,7 @@ export default async () => {
     projects: [
       {
         ...(await createJestConfig(clientTestConfig)()),
-        // Added transformIgnorePatterns to client tests to handle ESM dependencies from @langfuse/shared
+        // Added transformIgnorePatterns to client tests to handle ESM dependencies from /shared
         // Without this, importing from @langfuse/shared fails with "Unexpected token 'export'" errors
         transformIgnorePatterns: [
           `/web/node_modules/(?!(${esModules.join("|")})/)`,
