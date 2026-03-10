@@ -1,8 +1,9 @@
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { EventForm } from '@/components/EventForm'
 import { EventType } from '@prisma/client'
-import { Header } from '@/components/Header'
+import { Layout } from '@/components/Layout'
 import { Container } from '@/components/Container'
 import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/Button'
@@ -21,30 +22,27 @@ function NewEventPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-canvas">
-      <Header />
-      <main>
-        <Container className="py-12">
-          <div className="mb-6">
-            <Link href="/timeline">
-              <Button variant="secondary" className="mb-6">
-                ← Back to Timeline
-              </Button>
-            </Link>
-          </div>
+    <Layout>
+      <Container className="py-12">
+        <div className="mb-6">
+          <Link href="/timeline">
+            <Button variant="secondary" className="mb-6">
+              ← Back to Timeline
+            </Button>
+          </Link>
+        </div>
 
-          <PageHeader title="Create Event" description="Add a new event to the timeline" />
+        <PageHeader title="Create Event" description="Add a new event to the timeline" />
 
-          <div className="max-w-2xl">
-            <EventForm
-              pipelineId={pipelineId as string | undefined}
-              eventType={type as EventType | undefined}
-              onSuccess={handleSuccess}
-            />
-          </div>
-        </Container>
-      </main>
-    </div>
+        <div className="max-w-2xl">
+          <EventForm
+            pipelineId={pipelineId as string | undefined}
+            eventType={type as EventType | undefined}
+            onSuccess={handleSuccess}
+          />
+        </div>
+      </Container>
+    </Layout>
   )
 }
 
@@ -54,8 +52,13 @@ export default function NewEventPage() {
   const returnUrl = pipelineId ? `/recruitment/${pipelineId}` : '/timeline'
 
   return (
-    <ProtectedRoute returnUrl={returnUrl}>
-      <NewEventPageContent />
-    </ProtectedRoute>
+    <>
+      <Head>
+        <title>New Event · trunk-xyz</title>
+      </Head>
+      <ProtectedRoute returnUrl={returnUrl}>
+        <NewEventPageContent />
+      </ProtectedRoute>
+    </>
   )
 }
