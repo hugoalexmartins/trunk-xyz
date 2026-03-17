@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { UserShellLayout } from '@/components/user-shell/UserShellLayout'
@@ -247,6 +247,301 @@ function BadgeSection() {
   )
 }
 
+// ─── Form example ─────────────────────────────────────────────────────────────
+interface FormValues {
+  fullName: string
+  email: string
+  jobType: string
+  experience: string
+  terms: boolean
+}
+
+interface FormErrors {
+  fullName?: string
+  email?: string
+  jobType?: string
+  experience?: string
+  terms?: string
+}
+
+function FormSection() {
+  const [values, setValues] = useState<FormValues>({
+    fullName: '',
+    email: '',
+    jobType: '',
+    experience: '',
+    terms: false,
+  })
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [submitted, setSubmitted] = useState(false)
+
+  function validate(v: FormValues): FormErrors {
+    const e: FormErrors = {}
+    if (!v.fullName.trim()) e.fullName = 'Full name is required.'
+    if (!v.email.trim()) {
+      e.email = 'Email is required.'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) {
+      e.email = 'Enter a valid email address.'
+    }
+    if (!v.jobType) e.jobType = 'Select a job type.'
+    if (!v.experience) e.experience = 'Select your experience level.'
+    if (!v.terms) e.terms = 'You must accept the terms to continue.'
+    return e
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    const errs = validate(values)
+    setErrors(errs)
+    if (Object.keys(errs).length === 0) setSubmitted(true)
+  }
+
+  function handleCancel() {
+    setValues({ fullName: '', email: '', jobType: '', experience: '', terms: false })
+    setErrors({})
+    setSubmitted(false)
+  }
+
+  // Shared styles matching homepage link/button aesthetic
+  const btnBase: React.CSSProperties = {
+    padding: '14px 28px',
+    fontSize: 15,
+    fontWeight: 800,
+    border: `4px solid ${C.ink}`,
+    boxShadow: `5px 5px 0 ${C.ink}`,
+    textDecoration: 'none',
+    display: 'inline-block',
+    cursor: 'pointer',
+    transition: 'all .1s',
+    fontFamily: '"Space Grotesk", system-ui, sans-serif',
+    letterSpacing: '-0.01em',
+  }
+
+  const fieldLabel: React.CSSProperties = {
+    fontSize: 13,
+    fontWeight: 700,
+    color: C.ink,
+    display: 'block',
+    marginBottom: 6,
+  }
+
+  const errorMsg: React.CSSProperties = {
+    fontSize: 12,
+    fontWeight: 700,
+    color: C.accent,
+    marginTop: 4,
+    display: 'flex',
+    alignItems: 'center',
+    gap: 4,
+  }
+
+  const selectStyle = (hasError: boolean): React.CSSProperties => ({
+    width: '100%',
+    padding: '12px 16px',
+    fontSize: 15,
+    fontWeight: 700,
+    color: C.ink,
+    background: '#F5F9FC',
+    border: `4px solid ${hasError ? C.accent : C.ink}`,
+    boxShadow: hasError ? `0 0 0 2px ${C.accent}` : 'none',
+    borderRadius: 0,
+    appearance: 'none' as const,
+    cursor: 'pointer',
+    fontFamily: '"Space Grotesk", system-ui, sans-serif',
+  })
+
+  const radioGroupStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
+    padding: '12px 16px',
+    border: `4px solid ${errors.experience ? C.accent : C.ink}`,
+    background: '#F5F9FC',
+  }
+
+  const radioLabelStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    fontSize: 14,
+    fontWeight: 700,
+    color: C.ink,
+    cursor: 'pointer',
+  }
+
+  if (submitted) {
+    return (
+      <Section title="Form" description="Text, select, radio, validation — neo-brutalism style">
+        <div style={{
+          padding: '32px 40px',
+          background: C.primary,
+          border: `4px solid ${C.ink}`,
+          boxShadow: `6px 6px 0 ${C.ink}`,
+          maxWidth: 560,
+        }}>
+          <p style={{ fontSize: 28, fontWeight: 900, color: C.ink, margin: '0 0 8px', letterSpacing: '-0.02em' }}>
+            ✓ Submitted!
+          </p>
+          <p style={{ fontSize: 14, fontWeight: 600, color: C.ink, opacity: 0.75, margin: '0 0 24px' }}>
+            <strong>{values.fullName}</strong> · {values.email} · {values.jobType} · {values.experience}
+          </p>
+          <button onClick={handleCancel} style={{ ...btnBase, background: C.canvas, color: C.ink }}>
+            ← Reset form
+          </button>
+        </div>
+      </Section>
+    )
+  }
+
+  return (
+    <Section title="Form" description="Text, select, radio, validation — neo-brutalism style">
+      <form onSubmit={handleSubmit} noValidate style={{ maxWidth: 560 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+
+          {/* Text — Full name */}
+          <div>
+            <label htmlFor="form-name" style={fieldLabel}>Full name</label>
+            <input
+              id="form-name"
+              type="text"
+              placeholder="Jane Smith"
+              value={values.fullName}
+              onChange={e => setValues(v => ({ ...v, fullName: e.target.value }))}
+              style={{
+                width: '100%',
+                height: 36,
+                padding: '0 12px',
+                border: `3px solid ${errors.fullName ? C.accent : C.ink}`,
+                background: C.canvas,
+                fontSize: 13,
+                fontWeight: 600,
+                color: C.ink,
+                fontFamily: '"Space Grotesk", system-ui, sans-serif',
+                outline: 'none',
+                boxSizing: 'border-box',
+              }}
+            />
+            {errors.fullName && <p style={errorMsg}>⚠ {errors.fullName}</p>}
+          </div>
+
+          {/* Text — Email */}
+          <div>
+            <label htmlFor="form-email" style={fieldLabel}>Work email</label>
+            <input
+              id="form-email"
+              type="email"
+              placeholder="jane@example.com"
+              value={values.email}
+              onChange={e => setValues(v => ({ ...v, email: e.target.value }))}
+              style={{
+                width: '100%',
+                height: 36,
+                padding: '0 12px',
+                border: `3px solid ${errors.email ? C.accent : C.ink}`,
+                background: C.canvas,
+                fontSize: 13,
+                fontWeight: 600,
+                color: C.ink,
+                fontFamily: '"Space Grotesk", system-ui, sans-serif',
+                outline: 'none',
+                boxSizing: 'border-box',
+              }}
+            />
+            {errors.email
+              ? <p style={errorMsg}>⚠ {errors.email}</p>
+              : <p style={{ fontSize: 12, fontWeight: 600, color: C.faint, marginTop: 4 }}>Used to send you interview reminders.</p>
+            }
+          </div>
+
+          {/* Select — Job type */}
+          <div>
+            <label htmlFor="form-jobtype" style={fieldLabel}>Job type</label>
+            <div style={{ position: 'relative' }}>
+              <select
+                id="form-jobtype"
+                value={values.jobType}
+                onChange={e => setValues(v => ({ ...v, jobType: e.target.value }))}
+                style={selectStyle(!!errors.jobType)}
+              >
+                <option value="">Select a job type…</option>
+                <option value="full-time">Full-time</option>
+                <option value="part-time">Part-time</option>
+                <option value="contract">Contract / freelance</option>
+                <option value="internship">Internship</option>
+              </select>
+              {/* Custom chevron */}
+              <span style={{
+                position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)',
+                fontSize: 12, fontWeight: 900, color: C.ink, pointerEvents: 'none',
+              }}>▼</span>
+            </div>
+            {errors.jobType && <p style={errorMsg}>⚠ {errors.jobType}</p>}
+          </div>
+
+          {/* Radio — Experience */}
+          <div>
+            <span style={fieldLabel}>Experience level</span>
+            <div style={radioGroupStyle} role="group" aria-label="Experience level">
+              {[
+                { value: 'junior', label: 'Junior (0–2 yrs)' },
+                { value: 'mid', label: 'Mid-level (3–5 yrs)' },
+                { value: 'senior', label: 'Senior (6–10 yrs)' },
+                { value: 'staff', label: 'Staff / Principal (10+ yrs)' },
+              ].map(opt => (
+                <label key={opt.value} style={radioLabelStyle}>
+                  <input
+                    type="radio"
+                    name="experience"
+                    value={opt.value}
+                    checked={values.experience === opt.value}
+                    onChange={e => setValues(v => ({ ...v, experience: e.target.value }))}
+                    style={{ accentColor: C.primary, width: 18, height: 18, cursor: 'pointer' }}
+                  />
+                  {opt.label}
+                </label>
+              ))}
+            </div>
+            {errors.experience && <p style={errorMsg}>⚠ {errors.experience}</p>}
+          </div>
+
+          {/* Checkbox — Terms */}
+          <div style={{
+            padding: '12px 16px',
+            border: `4px solid ${errors.terms ? C.accent : C.ink}`,
+            background: errors.terms ? '#FFF0F4' : C.canvas,
+          }}>
+            <label style={{ ...radioLabelStyle, alignItems: 'flex-start' }}>
+              <input
+                type="checkbox"
+                checked={values.terms}
+                onChange={e => setValues(v => ({ ...v, terms: e.target.checked }))}
+                style={{ accentColor: C.primary, width: 18, height: 18, marginTop: 2, cursor: 'pointer', flexShrink: 0 }}
+              />
+              <span style={{ fontSize: 14, fontWeight: 600, color: C.ink, lineHeight: 1.4 }}>
+                I agree to the{' '}
+                <span style={{ fontWeight: 800, textDecoration: 'underline' }}>terms & conditions</span>
+                {' '}and confirm this is example data.
+              </span>
+            </label>
+            {errors.terms && <p style={{ ...errorMsg, marginTop: 8 }}>⚠ {errors.terms}</p>}
+          </div>
+
+          {/* Actions — homepage link style */}
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', paddingTop: 8 }}>
+            <button type="submit" style={{ ...btnBase, background: C.primary, color: C.ink }}>
+              Submit →
+            </button>
+            <button type="button" onClick={handleCancel} style={{ ...btnBase, background: C.canvas, color: C.ink }}>
+              Cancel
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </Section>
+  )
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   return (
@@ -269,6 +564,7 @@ export default function DashboardPage() {
           <ButtonSection />
           <CardSection />
           <InputSection />
+          <FormSection />
           <BadgeSection />
         </div>
 
