@@ -1,17 +1,24 @@
 import Head from 'next/head'
-import { Layout } from '@/components/Layout'
-import { Container } from '@/components/Container'
-import { PageHeader } from '@/components/PageHeader'
+import { UserShellLayout } from '@/components/user-shell/UserShellLayout'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
+
+const C = { ink: '#0B1929', faint: '#8B99A6' }
 
 function RecruitmentDetailContent() {
   return (
-    <Layout>
-      <Container className="py-12">
-        <PageHeader title="Recruitment Detail" description="Detailed view for a recruitment entry" />
-        <p className="text-neutral-dark font-bold">Coming soon.</p>
-      </Container>
-    </Layout>
+    <UserShellLayout>
+      <div style={{ padding: '64px 48px', fontFamily: '"Space Grotesk", system-ui, sans-serif' }}>
+        <div style={{ marginBottom: 40 }}>
+          <h1 style={{ fontSize: 52, fontWeight: 900, color: C.ink, margin: '0 0 8px', letterSpacing: '-0.04em', lineHeight: 1 }}>
+            Recruitment Detail
+          </h1>
+          <p style={{ fontSize: 16, fontWeight: 600, color: C.faint, margin: 0 }}>
+            Detailed view for a recruitment entry
+          </p>
+        </div>
+        <p style={{ fontSize: 16, fontWeight: 600, color: C.faint }}>Coming soon.</p>
+      </div>
+    </UserShellLayout>
   )
 }
 
