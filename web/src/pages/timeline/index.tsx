@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { Timeline } from '@/components/Timeline'
 import { EventFilters, type FilterState } from '@/components/EventFilters'
 import { useEvents } from '@/hooks/useEvents'
-import { Layout } from '@/components/Layout'
-import { PageHeader } from '@/components/PageHeader'
-import { Container } from '@/components/Container'
+import { UserShellLayout } from '@/components/user-shell/UserShellLayout'
 import { Button } from '@/components/Button'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
+
+const C = { ink: '#0B1929', faint: '#8B99A6' }
 
 function TimelinePageContent() {
   const [filters, setFilters] = useState<FilterState>({})
@@ -17,10 +17,16 @@ function TimelinePageContent() {
   const events = data?.events || []
 
   return (
-    <Layout>
-      <Container className="py-12">
-        <PageHeader title="Timeline" description="View all events in chronological order">
-          <div className="flex flex-col sm:flex-row gap-3">
+    <UserShellLayout>
+      <div style={{ padding: '64px 48px', fontFamily: '"Space Grotesk", system-ui, sans-serif' }}>
+        <div style={{ marginBottom: 48 }}>
+          <h1 style={{ fontSize: 52, fontWeight: 900, color: C.ink, margin: '0 0 8px', letterSpacing: '-0.04em', lineHeight: 1 }}>
+            Timeline
+          </h1>
+          <p style={{ fontSize: 16, fontWeight: 600, color: C.faint, margin: '0 0 24px' }}>
+            View all events in chronological order
+          </p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link href="/events/new">
               <Button variant="primary">New Event</Button>
             </Link>
@@ -28,13 +34,15 @@ function TimelinePageContent() {
               <Button variant="secondary">Recruitment Pipeline</Button>
             </Link>
           </div>
-        </PageHeader>
+        </div>
 
         <EventFilters onFilterChange={setFilters} />
 
         <Timeline events={events} isLoading={isLoading} error={error} groupByPipeline={false} />
-      </Container>
-    </Layout>
+      </div>
+
+      <style>{`@media (max-width: 640px) { div[style*="padding: 64px 48px"] { padding: 32px 24px !important; } }`}</style>
+    </UserShellLayout>
   )
 }
 

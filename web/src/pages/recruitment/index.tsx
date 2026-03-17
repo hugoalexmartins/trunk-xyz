@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react'
 import { Timeline } from '@/components/Timeline'
 import { useEvents } from '@/hooks/useEvents'
 import { EventType } from '@prisma/client'
-import { Layout } from '@/components/Layout'
-import { Container } from '@/components/Container'
-import { PageHeader } from '@/components/PageHeader'
+import { UserShellLayout } from '@/components/user-shell/UserShellLayout'
 import { Button } from '@/components/Button'
 import { Card, CardBody } from '@/components/Card'
 import { Badge } from '@/components/Badge'
 import { Spinner } from '@/components/Spinner'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
+
+const C = { ink: '#0B1929', faint: '#8B99A6' }
 
 interface PipelineGroup {
   pipelineId: string
@@ -49,10 +49,16 @@ function RecruitmentPageContent() {
   }, [data?.events])
 
   return (
-    <Layout>
-      <Container className="py-12">
-        <PageHeader title="Recruitment Pipeline" description="Track candidate journeys through the recruitment process">
-          <div className="flex flex-col sm:flex-row gap-3">
+    <UserShellLayout>
+      <div style={{ padding: '64px 48px', fontFamily: '"Space Grotesk", system-ui, sans-serif' }}>
+        <div style={{ marginBottom: 48 }}>
+          <h1 style={{ fontSize: 52, fontWeight: 900, color: C.ink, margin: '0 0 8px', letterSpacing: '-0.04em', lineHeight: 1 }}>
+            Recruitment Pipeline
+          </h1>
+          <p style={{ fontSize: 16, fontWeight: 600, color: C.faint, margin: '0 0 24px' }}>
+            Track candidate journeys through the recruitment process
+          </p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link href="/events/new?type=APPLICATION">
               <Button variant="primary">New Application</Button>
             </Link>
@@ -60,11 +66,11 @@ function RecruitmentPageContent() {
               <Button variant="secondary">All Events</Button>
             </Link>
           </div>
-        </PageHeader>
+        </div>
 
-        <div className="grid grid-cols-1 gap-4 mb-8">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16, marginBottom: 32 }}>
           {isLoading ? (
-            <div className="flex justify-center items-center py-12">
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '48px 0' }}>
               <Spinner size="lg" className="text-primary" />
             </div>
           ) : pipelines.length === 0 ? (
@@ -100,13 +106,17 @@ function RecruitmentPageContent() {
         </div>
 
         {data?.events && (
-          <div className="mt-12">
-            <h2 className="text-3xl font-bold text-ink mb-6">Recent Activity</h2>
+          <div style={{ marginTop: 48 }}>
+            <h2 style={{ fontSize: 28, fontWeight: 900, color: C.ink, margin: '0 0 24px', letterSpacing: '-0.02em' }}>
+              Recent Activity
+            </h2>
             <Timeline events={data.events.slice(0, 10)} groupByPipeline={true} />
           </div>
         )}
-      </Container>
-    </Layout>
+      </div>
+
+      <style>{`@media (max-width: 640px) { div[style*="padding: 64px 48px"] { padding: 32px 24px !important; } }`}</style>
+    </UserShellLayout>
   )
 }
 
