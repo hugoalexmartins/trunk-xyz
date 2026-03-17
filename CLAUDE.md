@@ -283,6 +283,188 @@ If CI fails:
 4. Push to your branch - CI will automatically re-run
 5. Once all checks pass, the merge button will be enabled
 
+## UI Style Guide
+
+This design system is **neo-brutalism / Deep Ocean**. All new UI must follow these rules with no deviations.
+
+### Color Palette
+
+Always use these exact hex values. Never substitute with Tailwind semantic names in inline styles — define a local `C` constant at the top of every file that needs colors.
+
+```ts
+const C = {
+  canvas:    '#F5F9FC', // ice blue — page/component background
+  ink:       '#0B1929', // deep navy — text, borders, shadows
+  primary:   '#00D9FF', // cyan — primary actions, active states, highlights
+  secondary: '#FFB81C', // amber — secondary actions, warnings
+  accent:    '#FF4D7D', // magenta — errors, alerts, destructive states
+  muted:     '#4A5A6A', // body/secondary text
+  faint:     '#8B99A6', // captions, helper text, disabled labels
+}
+```
+
+### Typography
+
+- **Font**: Space Grotesk only. Always set `fontFamily: '"Space Grotesk", system-ui, sans-serif'` on root containers.
+- **Weights in use**: 600 (semibold), 700 (bold), 800 (extrabold), 900 (black). Never use 400 or 500 for UI text.
+- **Heading scale**: h1 → 48–110px / 900, h2 → 36–80px / 900, h3 → 26–36px / 900, h4 → 22px / 700.
+- **Body**: 16px / 600, color `C.muted`.
+- **Helper/caption**: 12–13px / 600–700, color `C.faint`.
+- **Letter spacing**: headings use `-0.02em` to `-0.04em`. Labels/caps use `0.08em–0.1em`.
+
+### Borders
+
+- All interactive elements: `border: 3px solid ${C.ink}` (controls, inputs) or `border: 4px solid ${C.ink}` (cards, containers, sections).
+- **Never use `border-radius`**. All corners are sharp (`borderRadius: 0` / `rounded-none`).
+- Error state: switch border color to `C.accent`. Never remove the border.
+
+### Shadows (hard offset — no blur)
+
+```
+neo-sm:  2px 2px 0 ${C.ink}   — small controls (search inputs, tight elements)
+neo-md:  4px 4px 0 ${C.ink}   — default cards, standard buttons
+neo-lg:  6–8px 6–8px 0 ${C.ink} — prominent cards, hero elements
+neo-xl: 12px 12px 0 ${C.ink}  — featured/hero cards
+```
+
+Never use blurred (`box-shadow` with a spread/blur value) shadows on UI components.
+
+### Spacing Grid
+
+All padding and margins must be multiples of 8px: `8, 16, 24, 32, 40, 48, 64, 96px`. Do not use arbitrary values like 10px, 15px, 20px.
+
+### Inputs & Form Controls
+
+Use **inline styles only** (not the `<Input>` component) for raw inputs in pages. Match the DataGrid search input exactly:
+
+```ts
+// Standard text/email input
+{
+  width: '100%',
+  height: 36,
+  padding: '0 12px',
+  border: `3px solid ${hasError ? C.accent : C.ink}`,
+  background: C.canvas,
+  fontSize: 13,
+  fontWeight: 600,
+  color: C.ink,
+  fontFamily: '"Space Grotesk", system-ui, sans-serif',
+  outline: 'none',
+  boxSizing: 'border-box' as const,
+}
+
+// Select
+{
+  width: '100%',
+  padding: '12px 16px',
+  fontSize: 15,
+  fontWeight: 700,
+  color: C.ink,
+  background: C.canvas,
+  border: `4px solid ${hasError ? C.accent : C.ink}`,
+  borderRadius: 0,
+  appearance: 'none' as const,
+  cursor: 'pointer',
+  fontFamily: '"Space Grotesk", system-ui, sans-serif',
+}
+
+// Radio/Checkbox label wrapper
+{
+  display: 'flex',
+  alignItems: 'center',
+  gap: 10,
+  fontSize: 14,
+  fontWeight: 700,
+  color: C.ink,
+  cursor: 'pointer',
+}
+
+// Radio/Checkbox input element
+{ accentColor: C.primary, width: 18, height: 18, cursor: 'pointer' }
+```
+
+Field labels: `fontSize: 13, fontWeight: 700, color: C.ink, display: 'block', marginBottom: 6`.
+
+Error messages: `fontSize: 12, fontWeight: 700, color: C.accent, marginTop: 4` — prefix with `⚠`.
+
+Helper text (no error): `fontSize: 12, fontWeight: 600, color: C.faint, marginTop: 4`.
+
+### Buttons
+
+**Page-level action buttons** (submit, cancel, CTAs in pages) use **inline styles**, not the `<Button>` component:
+
+```ts
+// Primary (submit / main CTA)
+{
+  padding: '14px 28px',
+  fontSize: 15,
+  fontWeight: 800,
+  border: `4px solid ${C.ink}`,
+  background: C.primary,   // cyan fill
+  color: C.ink,
+  boxShadow: `5px 5px 0 ${C.ink}`,
+  cursor: 'pointer',
+  transition: 'all .1s',
+  fontFamily: '"Space Grotesk", system-ui, sans-serif',
+  letterSpacing: '-0.01em',
+}
+
+// Secondary (cancel / ghost)
+{
+  ...same as above,
+  background: C.canvas,    // no fill
+}
+```
+
+**Reusable component buttons** (inside feature components) use `<Button variant="primary|secondary|outline" size="sm|md|lg">`.
+
+### Cards & Containers
+
+```ts
+// Standard container/section box
+{
+  border: `4px solid ${C.ink}`,
+  boxShadow: `6px 6px 0 ${C.ink}`,
+  background: C.canvas,
+  padding: 40,            // multiples of 8
+}
+```
+
+Use `<Card>` component for data display cards. Use inline styles for one-off layout containers.
+
+### Decorative / Accent Techniques
+
+- **Rotated badges/pills**: `transform: 'rotate(-3deg)'` to `rotate(3deg)` — used sparingly for emphasis.
+- **Dark section band**: `background: C.ink` with `borderTop/Bottom: 4px solid ${C.ink}` — used for high-contrast sections.
+- **Highlight underline**: absolutely-positioned `<span>` with `background: C.primary`, `height: 12px`, `zIndex: -1` behind heading text.
+- **Watermark**: large emoji or symbol at 3–6% opacity, `userSelect: 'none'`, `position: absolute`.
+
+### Styling Approach by Context
+
+| Context | Use |
+|---|---|
+| Reusable component (`/components/`) | Tailwind utility classes |
+| Page-level layout, forms, sections | Inline styles with `C` constant |
+| Responsive breakpoints in pages | `<style>` tag with `@media` queries or Tailwind responsive classes |
+| DataGrid, tables | Inline styles (already established) |
+
+Never mix Tailwind and inline styles on the same element.
+
+### Interaction States
+
+- **Button press**: `translate(0.5px, 0.5px)` + remove shadow (`active:translate-x-0.5 active:shadow-none`).
+- **Card hover**: lift with `hover:-translate-y-0.5` + increase shadow.
+- **Input focus**: `outline: 'none'` — no focus ring on raw inputs. The `<Input>` component uses `focus:shadow-neo-md`.
+- **Transitions**: `transition: 'all .1s'` for buttons, `transition-all duration-200 ease-out` for components.
+- **Reduced motion**: always add `prefers-reduced-motion:transition-none` in Tailwind components.
+
+### Accessibility
+
+- All `<input>` elements must have an associated `<label>` (via `htmlFor`/`id` or wrapping).
+- Radio groups must have `role="group"` and `aria-label`.
+- Icon-only buttons must have `aria-label`.
+- Error messages must be associated with their field (`aria-describedby` or proximity).
+
 ## Troubleshooting
 
 ### Port Already in Use
