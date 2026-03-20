@@ -1,0 +1,25 @@
+merge_rules:
+  labels:
+    trigger: mergequeue
+    skip_line: mergequeue-priority
+    merge_failed: blocked
+    skip_delete_branch: ""
+  preconditions:
+    validations: []
+    required_checks: []
+    use_github_mergeability: true
+  merge_mode:
+    type: default
+    parallel_mode:
+      override_required_checks: []
+  auto_update:
+    label: ""
+  merge_commit: {}
+  merge_strategy:
+    override_labels:
+      squash: ""
+      merge: ""
+      rebase: ""
+  base_branches:
+    - main
+scenarios: []
