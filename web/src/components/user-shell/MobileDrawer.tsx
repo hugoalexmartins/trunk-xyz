@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/useAuth'
 import { getUserInitials } from '@/utils/getUserInitials'
+import { trpc } from '@/utils/trpc'
 
 const C = {
   canvas: '#F5F9FC',
@@ -11,10 +12,15 @@ const C = {
   muted: '#4A5A6A',
 }
 
-const NAV_LINKS = [
+const FULL_NAV_LINKS = [
   { label: 'Dashboard', href: '/user/dashboard', match: ['/user/dashboard'] },
   { label: 'Timeline', href: '/timeline', match: ['/timeline', '/user/timeline'] },
   { label: 'Recruitment', href: '/recruitment', match: ['/recruitment', '/user/events'] },
+  { label: 'New Application', href: '/applications/new', match: ['/applications/new'] },
+]
+
+const NEW_USER_NAV_LINKS = [
+  { label: 'New Application', href: '/applications/new', match: ['/applications/new'] },
 ]
 
 interface MobileDrawerProps {
@@ -25,10 +31,23 @@ interface MobileDrawerProps {
 export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
   const router = useRouter()
   const { user } = useAuth()
+  const [hasApplications, setHasApplications] = useState<boolean | null>(null)
 
   const initials = getUserInitials(null, user?.email)
   const displayName = user?.email?.split('@')[0] ?? 'User'
   const email = user?.email ?? ''
+
+  useEffect(() => {
+    if (!user) return
+    trpc.applications.hasAny.query().then(setHasApplications).catch(() => {
+      setHasApplications(true)
+    })
+  }, [user])
+
+  const isAdmin = user?.role === 'admin'
+  const showFullNav = isAdmin || hasApplications !== false
+
+  const navLinks = showFullNav ? FULL_NAV_LINKS : NEW_USER_NAV_LINKS
 
   useEffect(() => {
     if (isOpen) {
@@ -123,7 +142,7 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
 
         {/* Nav links */}
         <nav style={{ flex: 1, paddingTop: 8 }}>
-          {NAV_LINKS.map(({ label, href, match }) => {
+          {navLinks.map(({ label, href, match }) => {
             const isActive = match.some(p => router.pathname === p || router.pathname.startsWith(p + '/'))
             return (
               <Link

@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useScrolled } from '@/hooks/useScrolled'
+import { useAuth } from '@/hooks/useAuth'
 import { UserDropdown } from './UserDropdown'
+import { trpc } from '@/utils/trpc'
 
 const C = {
   canvas: '#F5F9FC',
@@ -10,10 +12,15 @@ const C = {
   primary: '#00D9FF',
 }
 
-const NAV_LINKS = [
+const FULL_NAV_LINKS = [
   { label: 'Dashboard', href: '/user/dashboard', match: ['/user/dashboard'] },
   { label: 'Timeline', href: '/timeline', match: ['/timeline', '/user/timeline'] },
   { label: 'Recruitment', href: '/recruitment', match: ['/recruitment', '/user/events'] },
+  { label: 'New Application', href: '/applications/new', match: ['/applications/new'] },
+]
+
+const NEW_USER_NAV_LINKS = [
+  { label: 'New Application', href: '/applications/new', match: ['/applications/new'] },
 ]
 
 interface UserHeaderProps {
@@ -23,6 +30,21 @@ interface UserHeaderProps {
 export function UserHeader({ onMenuOpen }: UserHeaderProps) {
   const scrolled = useScrolled()
   const router = useRouter()
+  const { user } = useAuth()
+  const [hasApplications, setHasApplications] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    if (!user) return
+    trpc.applications.hasAny.query().then(setHasApplications).catch(() => {
+      // Default to showing full nav on error to avoid blocking access
+      setHasApplications(true)
+    })
+  }, [user])
+
+  const isAdmin = user?.role === 'admin'
+  const showFullNav = isAdmin || hasApplications !== false
+
+  const navLinks = showFullNav ? FULL_NAV_LINKS : NEW_USER_NAV_LINKS
 
   return (
     <header style={{
@@ -55,7 +77,7 @@ export function UserHeader({ onMenuOpen }: UserHeaderProps) {
 
           {/* Desktop nav — hidden on mobile via CSS class */}
           <nav className="user-header-nav" aria-label="Main navigation" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            {NAV_LINKS.map(({ label, href, match }) => {
+            {navLinks.map(({ label, href, match }) => {
               const isActive = match.some(p => router.pathname === p || router.pathname.startsWith(p + '/'))
               return (
                 <Link
