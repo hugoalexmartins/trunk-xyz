@@ -27,8 +27,11 @@ function TimelinePageContent() {
             View all events in chronological order
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <Link href="/applications/new">
+              <Button variant="primary">New Application</Button>
+            </Link>
             <Link href="/events/new">
-              <Button variant="primary">New Event</Button>
+              <Button variant="secondary">New Event</Button>
             </Link>
             <Link href="/recruitment">
               <Button variant="secondary">Recruitment Pipeline</Button>

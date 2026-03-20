@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useLogin } from '@/hooks/useLogin'
+import { trpc } from '@/utils/trpc'
 
 const C = {
   canvas:    '#F5F9FC',
@@ -26,9 +27,22 @@ function LoginPageContent() {
       const result = await mutate(email, password)
       if (!result.approved) {
         router.push('/auth/pending-approval')
+      } else if (result.role === 'admin') {
+        // Admins always go to timeline
+        router.push('/timeline')
       } else {
-        const returnUrl = (router.query.returnUrl as string) || '/timeline'
-        router.push(returnUrl)
+        // Regular users: redirect to onboarding if no applications yet
+        const returnUrl = router.query.returnUrl as string | undefined
+        if (!returnUrl) {
+          try {
+            const hasAny = await trpc.applications.hasAny.query()
+            router.push(hasAny ? '/timeline' : '/onboarding')
+          } catch {
+            router.push('/timeline')
+          }
+        } else {
+          router.push(returnUrl)
+        }
       }
     } catch {
       // Error is handled by the hook

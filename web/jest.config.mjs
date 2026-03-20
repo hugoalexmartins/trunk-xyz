@@ -51,6 +51,16 @@ export default async () => {
         transformIgnorePatterns: [
           `/web/node_modules/(?!(${esModules.join("|")})/)`,
         ],
+        moduleNameMapper: {
+          "^@/server/(.*)$": "<rootDir>/src/server/$1",
+          "^@/hooks/(.*)$": "<rootDir>/src/hooks/$1",
+          "^@/utils/(.*)$": "<rootDir>/src/utils/$1",
+          "^@/features/(.*)$": "<rootDir>/src/features/$1",
+          "^@/components/(.*)$": "<rootDir>/src/components/$1",
+          "^@/contexts/(.*)$": "<rootDir>/src/contexts/$1",
+          "^@/pages/(.*)$": "<rootDir>/src/pages/$1",
+          "^@/src/(.*)$": "<rootDir>/src/$1",
+        },
       },
     ],
   };

@@ -1,15 +1,4 @@
-## ADDED Requirements
-
-### Requirement: Recruitment event types
-The system SHALL define and support recruitment-specific event types representing stages of hiring process.
-
-#### Scenario: Supported recruitment types
-- **WHEN** checking available event types for recruitment
-- **THEN** the following types are supported: APPLICATION, SCREENING, INTERVIEW, OFFER, REJECTION, HIRED
-
-#### Scenario: Event creation with recruitment type
-- **WHEN** creating an event with type=INTERVIEW for a recruitment pipeline
-- **THEN** the event is created with recruitment context and can be filtered by type
+## MODIFIED Requirements
 
 ### Requirement: Recruitment-specific metadata
 The system SHALL support recruitment-specific metadata fields for different event types.
@@ -26,16 +15,7 @@ The system SHALL support recruitment-specific metadata fields for different even
 - **WHEN** creating OFFER event with metadata (salary, start_date, position, benefits)
 - **THEN** offer details are stored for tracking offer terms
 
-### Requirement: Recruitment pipeline statuses
-The system SHALL support status tracking specific to recruitment workflows.
-
-#### Scenario: Application status progression
-- **WHEN** updating APPLICATION event status from PENDING → UNDER_REVIEW → ACCEPTED
-- **THEN** status changes are tracked and reflect review progress
-
-#### Scenario: Rejection status
-- **WHEN** an APPLICATION event status is set to REJECTED
-- **THEN** the rejection is recorded and subsequent stages may be excluded
+## ADDED Requirements
 
 ### Requirement: APPLICATION event as pipeline head
 The system SHALL treat the APPLICATION event as the canonical head of a recruitment pipeline, identified by its self-referencing pipelineId.
@@ -51,14 +31,3 @@ The system SHALL treat the APPLICATION event as the canonical head of a recruitm
 #### Scenario: Pipeline head is queryable
 - **WHEN** querying events with type=APPLICATION and createdById matching the current user
 - **THEN** the results represent all active recruitment pipelines for that user, one per application
-
-### Requirement: Recruitment dashboard representation
-The system SHALL provide recruitment-specific view of pipelines as candidate journeys.
-
-#### Scenario: Candidate pipeline view
-- **WHEN** viewing a recruitment pipelineId
-- **THEN** the complete candidate journey from application through hire/rejection is visible
-
-#### Scenario: Multi-candidate view
-- **WHEN** viewing all recruitment events without pipelineId filter
-- **THEN** all candidate journeys are shown chronologically for overview
