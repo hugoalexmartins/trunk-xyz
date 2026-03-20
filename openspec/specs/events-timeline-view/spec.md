@@ -37,6 +37,21 @@ The system SHALL use visual cues (color, icon, label) to distinguish different e
 - **WHEN** viewing timeline
 - **THEN** a legend shows what each color/icon represents
 
+### Requirement: New Application CTA on timeline
+The system SHALL display a prominent "New Application" call-to-action on the timeline page for users who already have at least one application.
+
+#### Scenario: CTA visible on timeline for returning users
+- **WHEN** an approved regular user with at least one APPLICATION event views /timeline
+- **THEN** a "New Application" button or link is visible on the page
+
+#### Scenario: CTA navigates to application form
+- **WHEN** the user clicks the "New Application" CTA on the timeline
+- **THEN** the user is navigated to /applications/new
+
+#### Scenario: Timeline shows application date field
+- **WHEN** viewing an APPLICATION event card on the timeline
+- **THEN** the event's date field is displayed (not createdAt)
+
 ### Requirement: Pagination for large event sets
 The system SHALL support pagination or infinite scroll for timelines with many events.
 

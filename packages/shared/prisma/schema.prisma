@@ -53,6 +53,7 @@ model Event {
   title     String
   description String?
   metadata  Json?     // Event-type-specific data stored as JSON
+  date      DateTime  @default(now())
   createdById String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
